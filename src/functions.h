@@ -1,0 +1,1 @@
+//déclarer les fonctions ici
