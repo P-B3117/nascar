@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <LibRobus.h>
 #include "ArduPID.h"
+#include <Wire.h>
+#include "Adafruit_TCS34725.h"
 
 //définir les fonctions ici
 
