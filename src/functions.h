@@ -13,9 +13,9 @@
 #define VITESSE_TOURNEDROITE_DROITE
 
 //define pour avancer
-#define TARGET_POSITION 20000
-#define VITESSE_AVANCE_GAUCHE 0.44
-#define VITESSE_AVANCE_DROITE 0.44
+#define TARGET_POSITION 40000
+#define VITESSE_AVANCE_GAUCHE 0.3
+#define VITESSE_AVANCE_DROITE 0.3
 
 void tournegauche(float valeurGauche, float valeurDroite );
 

@@ -5,11 +5,11 @@
 
 //PID
 //define
-#define pLeft  0.0004
+#define pLeft  0.0006
 #define iLeft  0.001
 #define dLeft  0
 
-#define pRight 0.0004
+#define pRight 0.0006
 #define iRight 0.001
 #define dRight 0
 
