@@ -3,44 +3,59 @@
 #include <LibRobus.h>
 #include "ArduPID.h"
 
-#define Gauche 0
-#define Droite 1
+//PID
+//define
+#define pLeft  0.0004
+#define iLeft  0.001
+#define dLeft  0
 
-//define pour tourner a gauche
-#define VITESSE_TOURNEGAUCHE_GAUCHE
-#define VITESSE_TOURNEGAUCHE_DROITE
+#define pRight 0.0004
+#define iRight 0.001
+#define dRight 0
 
-//define pour tourner a droite
-#define VITESSE_TOURNEDROITE_GAUCHE
-#define VITESSE_TOURNEDROITE_DROITE
+ArduPID myPIDLeft;
+ArduPID myPIDRight;
 
-//define pour avancer
-#define VITESSE_AVANCE_GAUCHE
-#define VITESSE_AVANCE_DROITE
+double   KpLeft = pLeft, KiLeft = iLeft, KdLeft = dLeft;
+double   KpRight = pRight, KiRight = iRight, KdRight = dRight;
+
+double SetpointLeft, InputLeft, OutputLeft;
+double SetpointRight, InputRight, OutputRight;
 
 
 
 
 //définir les fonctions ici
 
+void create()
+{
+    myPIDLeft.begin(&InputLeft, &OutputLeft, &SetpointLeft, KpLeft, KiLeft, KdLeft);
+    myPIDRight.begin(&InputRight, &OutputRight, &SetpointRight, KpRight, KiRight, KdRight);
+
+    myPIDLeft.setOutputLimits(0,0.1);
+    myPIDRight.setOutputLimits(0,0.1);
+}
 
 void tournegauche( float valeurGauche, float valeurDroite ){
  
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
+
+  int encodeurGauche = ENCODER_Read(Gauche);
+  int encodeurDroite = ENCODER_Read(Droite); 
   
-  if (ENCODER_Read(Gauche)<-1942 || ENCODER_Read(Droite)>1942 )
+  if (encodeurGauche<-1942 || encodeurDroite>1942 )
   {
-    if (ENCODER_Read(Gauche)<-1942){
+    if (encodeurGauche<-1942){
         MOTOR_SetSpeed(Gauche,0);
-      if (ENCODER_Read(Droite)>1942){
+      if (encodeurDroite>1942){
         MOTOR_SetSpeed(Droite,0);
         return;
        }     }
-    else if (ENCODER_Read(Droite)>1942){
+    else if (encodeurDroite>1942){
         MOTOR_SetSpeed(Droite,0);
 
-        if (ENCODER_Read(Gauche)<-1942){
+        if (encodeurGauche<-1942){
         MOTOR_SetSpeed(Gauche,0);
         return;
        } 
@@ -49,68 +64,106 @@ void tournegauche( float valeurGauche, float valeurDroite ){
 
 }
 }
+
+
 void tournedroit(float valeurGauche,float valeurDroite){
  
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
+
+  int encodeurGauche = ENCODER_Read(Gauche);
+  int encodeurDroite = ENCODER_Read(Droite);
   
-  if (ENCODER_Read(Gauche)>1942 || ENCODER_Read(Droite)<-1942 )
+  if (encodeurGauche>1942 || encodeurDroite<-1942 )
   {
-    if (ENCODER_Read(Gauche)>1942){
+    if (encodeurGauche>1942){
         MOTOR_SetSpeed(Gauche,0);
-      if (ENCODER_Read(Droite)<-1942){
+      if (encodeurDroite<-1942){
         MOTOR_SetSpeed(Droite,0);
         return;
        } 
     }
-    else if (ENCODER_Read(Droite)<-1942){
+    else if (encodeurDroite<-1942){
         MOTOR_SetSpeed(Droite,0);
 
-        if (ENCODER_Read(Gauche)>1942){
+        if (encodeurGauche>1942){
         MOTOR_SetSpeed(Gauche,0);
         return;
        } 
   }
 
 
-}
+ }
 }
 
-void avance(float valeurGauche,float valeurDroite)
+void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE)
 {
+
+  ENCODER_Reset(Gauche);
+  ENCODER_Reset(Droite);
+  
   MOTOR_SetSpeed(Gauche,valeurGauche);
   MOTOR_SetSpeed(Droite,valeurDroite);
-  if ( ENCODER_Read(Gauche)< ENCODER_Read(Droite))
+
+  int encodeurGauche = ENCODER_Read(Gauche);
+  int encodeurDroite = ENCODER_Read(Droite);
+
+while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
+{
+
+  int encodeurGauche = ENCODER_Read(Gauche);
+  int encodeurDroite = ENCODER_Read(Droite);
+
+  if ( encodeurGauche< encodeurDroite)
   {
-    MOTOR_SetSpeed(Gauche,valeurGauche+0.05);
+    OutputRight = 0;
+    InputLeft = encodeurGauche;
+    SetpointLeft = encodeurDroite;
+    myPIDLeft.compute();
+    MOTOR_SetSpeed(Gauche, valeurGauche + OutputLeft);
   }
 
-  else if ( ENCODER_Read(Gauche)> ENCODER_Read(Droite))
+  else if ( encodeurGauche> encodeurDroite)
   {
-    MOTOR_SetSpeed(Gauche,valeurGauche-0.05);
+    OutputLeft = 0;
+    InputRight = encodeurDroite;
+    SetpointRight = encodeurGauche;
+    myPIDRight.compute();
+    MOTOR_SetSpeed(Droite, valeurDroite + OutputRight);
   }
   else
   {
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
   }
-  if (ENCODER_Read(Gauche)>20000 || ENCODER_Read(Droite)>20000 )
+  if (encodeurGauche> TARGET_POSITION || encodeurDroite> TARGET_POSITION )
   {
-    if (ENCODER_Read(Gauche)>20000){
+    if (encodeurGauche> TARGET_POSITION){
         MOTOR_SetSpeed(Gauche,0);
-      if (ENCODER_Read(Droite)>20000){
+      if (encodeurDroite> TARGET_POSITION){
         MOTOR_SetSpeed(Droite,0);
         return;
        } 
     }
-    else if (ENCODER_Read(Droite)>20000){
+    else if (encodeurDroite> TARGET_POSITION){
         MOTOR_SetSpeed(Droite,0);
 
-        if (ENCODER_Read(Gauche)>20000){
+        if (encodeurGauche> TARGET_POSITION){
         MOTOR_SetSpeed(Gauche,0);
         return;
        } 
   }
 
+ }
+
+ Serial.print(encodeurGauche);
+ Serial.print("     ");
+ Serial.print(OutputLeft);
+ Serial.print("     ");
+ Serial.print(encodeurDroite);
+ Serial.print("     ");
+ Serial.print(OutputRight);
+ Serial.print("     ");
+ Serial.println();
 }
 }
