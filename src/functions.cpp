@@ -3,7 +3,7 @@
 
   tcs34725 rgb_sensor;
 
-int couleurINIT() {
+void couleurINIT() {
 
   rgb_sensor.begin();
   pinMode(4, OUTPUT);

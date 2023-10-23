@@ -107,7 +107,7 @@ int tcs34725::getData(void) {
   }
   Serial.println(couleur);
 
-  delay(20);
+  delay(200);
 
   return couleur;
 }

@@ -7,4 +7,4 @@
 #include "sensor_couleur.h"
 
   int getCouleur(void);  
-  int couleurINIT();
+  void couleurINIT();
