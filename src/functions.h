@@ -1,4 +1,8 @@
 #pragma once
 //déclarer les fonctions ici
 
-int exemple(int wow);
+void tournegauche(float valeurGauche, float valeurDroite );
+
+void tournedroit(float valeurGauche,float valeurDroite);
+
+void avance(float valeurGauche,float valeurDroite);
