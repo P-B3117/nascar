@@ -1,14 +1,16 @@
 #include "functions.h"
-#include <Arduino.h>
-#include <LibRobus.h>
-#include "ArduPID.h"
-#include <Wire.h>
-#include "Adafruit_TCS34725.h"
 
-//définir les fonctions ici
 
-int exemple(int wow)
-{
-    //voici un exemple d'utilisation d'headers et de multiples fichiers
-    return wow;
+  tcs34725 rgb_sensor;
+
+int couleurINIT() {
+
+  rgb_sensor.begin();
+  pinMode(4, OUTPUT);
+  digitalWrite(4, LOW); // @gremlins Bright light, bright light!
+
+}
+
+int getCouleur() {
+    return rgb_sensor.getData();
 }

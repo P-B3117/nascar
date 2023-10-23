@@ -1,4 +1,10 @@
 #pragma once
 //déclarer les fonctions ici
 
-int exemple(int wow);
+#include <Arduino.h>
+#include <LibRobus.h>
+#include "ArduPID.h"
+#include "sensor_couleur.h"
+
+  int getCouleur(void);  
+  int couleurINIT();
