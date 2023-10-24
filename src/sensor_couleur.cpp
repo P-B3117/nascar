@@ -76,6 +76,14 @@ int tcs34725::getData(void) {
  // if (c < 10000){
    // couleur = JAUNE;
  // }
+ /*Serial.print("r=");
+ Serial.println(r);
+ Serial.print("g=");
+ Serial.println(g);
+ Serial.print("b=");
+ Serial.println(b);
+ Serial.print("c=");
+ Serial.println(c);*/
   if (c > 10000){
   if (r > g && r > b){
     couleur=ROUGE;
