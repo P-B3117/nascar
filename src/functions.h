@@ -1,4 +1,4 @@
 #pragma once
 //déclarer les fonctions ici
 
-int exemple(int wow);
+void servomotor(int servo,float angle);

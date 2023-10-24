@@ -2,7 +2,8 @@
 #include <LibRobus.h>
 #include "ArduPID.h"
 #include "functions.h"
-
+#define SERVO 1 //0 ou 1
+#define ANGLE 90 //angle entre 0 et 180 degré
 //mettez vos fonctions dans functions.h et functions.h
 //j'ai créer la fonction exemple pour vous guider
 
@@ -10,9 +11,16 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   BoardInit();
-  exemple(3);
+   SERVO_Enable(SERVO);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
+  SERVO_SetAngle(SERVO,ANGLE);
+  delay(1000);
+  SERVO_SetAngle(SERVO,45);
+  delay(1000);
+  SERVO_Disable(SERVO);
+
+  return;
 }
