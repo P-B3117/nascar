@@ -1,4 +1,4 @@
 #pragma once
 //déclarer les fonctions ici
 
-int exemple(int wow);
+float detection_distance (void);
