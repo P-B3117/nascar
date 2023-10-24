@@ -4,11 +4,6 @@
 #include "functions.h"
 #include <stdio.h>
 
-float vitesse_tournegauche_gauche = -0.1;
-float vitesse_tournegauche_droite = 0.1;
-float vitesse_tournedroite_gauche = 0.1;
-float vitesse_tournedroite_droite = -0.1;
-
 
 //PID
 

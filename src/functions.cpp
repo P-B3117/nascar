@@ -96,24 +96,45 @@ void tournedroit(float valeurGauche,float valeurDroite){
  }
 }
 
-void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE)
+void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE)
 {
+  bool isDecelerating = 0;
 
   ENCODER_Reset(Gauche);
   ENCODER_Reset(Droite);
   
+  MOTOR_SetSpeed(Gauche,valeurGauche + 0.01);
+  MOTOR_SetSpeed(Droite,valeurDroite);
+
+  long encodeurGauche = ENCODER_Read(Gauche);
+  long encodeurDroite = ENCODER_Read(Droite);
+
+  float beginMillis = millis();
+
+while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
+{
   MOTOR_SetSpeed(Gauche,valeurGauche);
   MOTOR_SetSpeed(Droite,valeurDroite);
 
   int encodeurGauche = ENCODER_Read(Gauche);
   int encodeurDroite = ENCODER_Read(Droite);
 
-while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
-{
+//deceleration
+  if ( TARGET_POSITION/10 - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)  <= 400  && valeurGauche > VITESSE_AVANCE_GAUCHE)
+  {
+    isDecelerating = true;
+    valeurGauche -= 0.1;
+    valeurDroite -= 0.1;
+    //valeurGauche -= (TARGET_POSITION - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+    //valeurDroite -= (TARGET_POSITION - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+  }
+  else if (valeurGauche < 0.7 && !isDecelerating) //acceleration
+  {
+    valeurGauche += (millis() - beginMillis)/10000.0;
+    valeurDroite += (millis() - beginMillis)/10000.0;
+  }
 
-  int encodeurGauche = ENCODER_Read(Gauche);
-  int encodeurDroite = ENCODER_Read(Droite);
-
+  //ajustement
   if ( encodeurGauche< encodeurDroite)
   {
     OutputRight = 0;
@@ -156,6 +177,8 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
 
  }
 
+
+
  Serial.print(encodeurGauche);
  Serial.print("     ");
  Serial.print(OutputLeft);
@@ -164,6 +187,9 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
  Serial.print("     ");
  Serial.print(OutputRight);
  Serial.print("     ");
+ Serial.print(valeurGauche);
+ Serial.print("     ");
+ Serial.print((encodeurGauche/10 + encodeurDroite/10) / 2.0);
  Serial.println();
 }
 }
