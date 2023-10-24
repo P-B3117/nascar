@@ -7,9 +7,12 @@
 
 //définir les fonctions ici
 
-float detection_distance (void){
-    float distance=ROBUS_ReadIR(DROITE);
-    Serial.println(distance);
-    return distance;
+void detection_distance (void){
+    float distance_droite=ROBUS_ReadIR(DROITE)/1024.0;
+    float distance_gauche=ROBUS_ReadIR(GAUCHE)/1024.0;
+    Serial.print("      Droite:");
+    Serial.print(distance_droite);
+    Serial.print("      Gauche:");
+    Serial.println(distance_gauche);
 
 }
