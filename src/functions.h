@@ -1,4 +1,5 @@
 #pragma once
 //déclarer les fonctions ici
 
-void detection_distance (void);
+float detection_distance_droite (void);
+float detection_distance_gauche (void);
