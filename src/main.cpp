@@ -15,10 +15,10 @@ void setup()
   couleurINIT();
  
 
-  while (!detectionSifflet()== true){
-  }
+  while (!detectionSifflet()== true || ROBUS_IsBumper(2)==true){
     couleurInitiale = 2;
-
+  }
+  
 }
 
 
@@ -31,6 +31,7 @@ void loop()
   switch(couleurInitiale){
     case JAUNE:
     avance();
+
     break;
 
 
