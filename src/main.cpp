@@ -17,7 +17,7 @@ void setup()
 
   while (!detectionSifflet()== true){
   }
-    couleurInitiale = 1;
+    couleurInitiale = 2;
 
 }
 
@@ -29,13 +29,13 @@ void loop()
   Serial.println(ENCODER_Read(0));
   */
   switch(couleurInitiale){
-    case 1: //Parcour a effectuer couleur initiale jaune
+    case JAUNE:
     avance();
     break;
 
 
 
-    case 2: //Parcour a effectuer couleur initiale jaune
+    case VERT: //Parcour a effectuer couleur initiale jaune
     
     break;
   }
