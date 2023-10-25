@@ -12,11 +12,12 @@ void setup()
   BoardInit();
   Serial.begin(9600);
   create();
+  
  
 
   while (!detectionSifflet()== true){
-    couleurInitiale = 1;
   }
+    couleurInitiale = 1;
 
 }
 

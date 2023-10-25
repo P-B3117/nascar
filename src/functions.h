@@ -31,4 +31,8 @@ void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITE
 
 void create();
 
+void couleurINIT();
+
+int getCouleur();
+
 bool detectionSifflet ();

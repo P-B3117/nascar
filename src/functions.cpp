@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <LibRobus.h>
 #include "ArduPID.h"
+#include "sensor_couleur.h"
 
 //PID
 //define
@@ -31,10 +32,24 @@ unsigned long previousMillis = 0;
 unsigned long interval = 1000;
 
 //detecteur de couleur
+ tcs34725 rgb_sensor;
 
 
 
 //définir les fonctions ici
+
+void couleurINIT() { //
+
+  rgb_sensor.begin();
+  pinMode(4, OUTPUT);
+  digitalWrite(4, LOW); // @gremlins Bright light, bright light!
+
+}
+
+int getCouleur() {
+    return rgb_sensor.getData();
+}
+
 
 void create()
 {
