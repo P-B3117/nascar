@@ -10,17 +10,17 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   BoardInit();
-  detection_distance_droite ();
-  detection_distance_gauche ();
+  detection_distance_bas ();
+  detection_distance_haut ();
 }
 
 void loop() {
- detection_distance_droite();
- detection_distance_gauche();
- Serial.print("droite:");
- Serial.println(detection_distance_droite());
-Serial.print("     gauche:");
- Serial.println(detection_distance_gauche());
+ detection_distance_bas();
+ detection_distance_haut();
+ Serial.print("bas:");
+ Serial.println(detection_distance_bas());
+Serial.print("     haut:");
+ Serial.println(detection_distance_haut());
 
  delay(500);
 
