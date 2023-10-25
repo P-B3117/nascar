@@ -4,6 +4,12 @@
 #include "ArduPID.h"
 #include "sensor_couleur.h"
 
+
+//détecteur de distance
+//define
+#define BAS 2
+#define HAUT 3
+
 //PID
 //define
 #define pLeft  0.0006
@@ -35,8 +41,18 @@ unsigned long interval = 1000;
  tcs34725 rgb_sensor;
 
 
-
-//définir les fonctions ici
+float detection_distance_bas (void){
+    float tension_bas=ROBUS_ReadIR(BAS);
+    float inverse_bas=1/tension_bas;
+    float distance_bas=inverse_bas*6839.3-6.3;
+    return distance_bas;
+}
+float detection_distance_haut (void){
+    float tension_haut=ROBUS_ReadIR(HAUT);
+    float inverse_haut=1/tension_haut;
+    float distance_haut=inverse_haut*6839.3-6.3;
+    return distance_haut;
+}
 
 void couleurINIT() { //
 

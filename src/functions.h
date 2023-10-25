@@ -21,7 +21,9 @@
 #define micpin A7
 #define moyenneSifflet 300
 
+float detection_distance_haut (void);
 
+float detection_distance_bas (void);
 
 void tournegauche(float valeurGauche, float valeurDroite );
 
