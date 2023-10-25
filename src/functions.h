@@ -1,6 +1,10 @@
 #pragma once
 //déclarer les fonctions ici
 
+//define pour les couleurs
+#include "sensor_couleur.h"
+
+
 #define Gauche 0
 #define Droite 1
 
