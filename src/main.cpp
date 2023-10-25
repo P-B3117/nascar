@@ -19,7 +19,7 @@ void loop() {
  detection_distance_haut();
  Serial.print("bas:");
  Serial.println(detection_distance_bas());
-Serial.print("     haut:");
+Serial.print("haut:");
  Serial.println(detection_distance_haut());
 
  delay(500);
