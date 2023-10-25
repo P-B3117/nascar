@@ -17,6 +17,9 @@
 #define VITESSE_AVANCE_GAUCHE 0.3
 #define VITESSE_AVANCE_DROITE 0.3
 
+//define pour slowDown
+#define TARGET_SLOW 4000
+
 //define pour sifflet
 #define micpin A7
 #define moyenneSifflet 300
@@ -29,7 +32,9 @@ void tournegauche(float valeurGauche, float valeurDroite );
 
 void tournedroit(float valeurGauche,float valeurDroite);
 
-void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE);
+void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION);
+
+void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE);
 
 void create();
 

@@ -12,6 +12,7 @@
 
 //PID
 //define
+
 #define pLeft  0.0006
 #define iLeft  0.001
 #define dLeft  0
@@ -136,7 +137,7 @@ void tournedroit(float valeurGauche,float valeurDroite){
  }
 }
 
-void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE)
+void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION)
 {
   bool isDecelerating = 0;
 
@@ -151,7 +152,7 @@ void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VIT
 
   float beginMillis = millis();
 
-while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
+while (encodeurGauche != target && encodeurDroite != target)
 {
   MOTOR_SetSpeed(Gauche,valeurGauche);
   MOTOR_SetSpeed(Droite,valeurDroite);
@@ -159,16 +160,7 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
   int encodeurGauche = ENCODER_Read(Gauche);
   int encodeurDroite = ENCODER_Read(Droite);
 
-//deceleration
-  if ( TARGET_POSITION/10 - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)  <= 400  && valeurGauche > VITESSE_AVANCE_GAUCHE)
-  {
-    isDecelerating = true;
-    valeurGauche -= 0.1;
-    valeurDroite -= 0.1;
-    //valeurGauche -= (TARGET_POSITION - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
-    //valeurDroite -= (TARGET_POSITION - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
-  }
-  else if (valeurGauche < 0.7 && !isDecelerating) //acceleration
+  if (valeurGauche < 0.8 && !isDecelerating) //acceleration
   {
     valeurGauche += (millis() - beginMillis)/10000.0;
     valeurDroite += (millis() - beginMillis)/10000.0;
@@ -197,27 +189,25 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
   }
-  if (encodeurGauche> TARGET_POSITION || encodeurDroite> TARGET_POSITION )
+  if (encodeurGauche> target || encodeurDroite> target )
   {
-    if (encodeurGauche> TARGET_POSITION){
+    if (encodeurGauche> target){
         MOTOR_SetSpeed(Gauche,0);
-      if (encodeurDroite> TARGET_POSITION){
+      if (encodeurDroite> target){
         MOTOR_SetSpeed(Droite,0);
         return;
        } 
     }
-    else if (encodeurDroite> TARGET_POSITION){
+    else if (encodeurDroite> target){
         MOTOR_SetSpeed(Droite,0);
 
-        if (encodeurGauche> TARGET_POSITION){
+        if (encodeurGauche> target){
         MOTOR_SetSpeed(Gauche,0);
         return;
        } 
   }
 
  }
-
-
 
  Serial.print(encodeurGauche);
  Serial.print("     ");
@@ -233,6 +223,21 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
  Serial.println();
 }
 }
+
+void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE)
+ {
+
+  long encodeurGauche = ENCODER_Read(Gauche);
+  long encodeurDroite = ENCODER_Read(Droite);
+
+  if ( target/10 - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)  <= TARGET_SLOW/10  && valeurGauche > VITESSE_AVANCE_GAUCHE)
+  {
+    valeurGauche -= 0.1;
+    valeurDroite -= 0.1;
+    //valeurGauche -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+    //valeurDroite -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+  }
+ }
 
 
 bool detectionSifflet (){
