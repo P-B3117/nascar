@@ -23,6 +23,15 @@ double SetpointLeft, InputLeft, OutputLeft;
 double SetpointRight, InputRight, OutputRight;
 
 
+//Variable global Sifflet
+int mic ; //valeur de lecture du micro
+int amplitude;
+bool siffletActif = false;
+unsigned long previousMillis = 0;
+unsigned long interval = 1000;
+
+//detecteur de couleur
+
 
 
 //définir les fonctions ici
@@ -193,3 +202,28 @@ while (encodeurGauche != TARGET_POSITION && encodeurDroite != TARGET_POSITION)
  Serial.println();
 }
 }
+
+
+bool detectionSifflet (){
+
+  unsigned long currentMillis = millis();
+  mic = analogRead(micpin);
+  amplitude = abs(moyenneSifflet - mic); 
+  //Serial.println(amplitude);
+
+  if(amplitude>700){
+    if(currentMillis-previousMillis > interval){
+      siffletActif = true;
+      }
+    }
+
+  else{
+    previousMillis = currentMillis;
+    siffletActif = false;
+  }
+  Serial.println(siffletActif);
+
+  return siffletActif;
+
+}
+
