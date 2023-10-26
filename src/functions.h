@@ -19,7 +19,7 @@
 //define pour avancer
 #define VITESSE_AVANCE_GAUCHE 0.3
 #define VITESSE_AVANCE_DROITE 0.3
-#define SPEEDLIMIT 0.7
+#define SPEEDLIMIT 0.4
 #define SPEEDLIMITLENT 0.4
 
 //define pour slowDown
@@ -50,6 +50,8 @@ void tournegauche(float valeurGauche, float valeurDroite ); //legacy, pas touche
 
 void tournedroit(float valeurGauche,float valeurDroite); //legacy, pas touche tourne de 90deg
 
+void tourne();
+
 void avance(float speedLimit = SPEEDLIMIT); //avance continuellement
 
 void slowDown(int target = TARGET_SLOW);  //ralenti
@@ -57,8 +59,6 @@ void slowDown(int target = TARGET_SLOW);  //ralenti
 void avancerUpdate();
 
 void avancerReset();
-
-void avancerINIT();
 
 void create();
 

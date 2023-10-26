@@ -59,8 +59,13 @@ void loop()
           etape ++; 
         }
         break;
-      case 4://on tourne encore
-        slowDown();// pour tourne droite
+      case 4:
+        avance();
+        if (getCouleur()==JAUNE){
+          
+        }
+      case 5://on tourne encore
+        slowDown();// pour tourne droite 90
         etape ++;
         break;      
 

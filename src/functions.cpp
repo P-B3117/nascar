@@ -157,6 +157,9 @@ struct nice{
 
 void avance(float speedLimit = SPEEDLIMIT)
 {
+  
+ int beginMillis = millis();
+
   if (avancer.isMoving == false)
   {
   avancer.isMoving = true;
@@ -213,8 +216,96 @@ void avance(float speedLimit = SPEEDLIMIT)
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
 
- delay(20);
+while ( millis() < beginMillis + 100 ) {}
  
+}
+
+
+void tourne()
+{
+
+  float speedLimit = 0.4;
+  int ratioTour = 0;
+
+  switch (getCouleur())
+  {
+  case BLEU:
+    ratioTour = 2/0.1;
+    break;
+  
+  case VERT:
+    ratioTour = 2/1;
+    break;
+  
+  case JAUNE:
+    ratioTour = 3/2;
+    break;
+  
+  case ROUGE:
+    ratioTour = 4/3;
+    break;
+  
+  
+  }
+
+  if (avancer.isMoving == false)
+  {
+  avancer.isMoving = true;    
+  avancer.beginMillis = millis();
+  }
+
+  avancerUpdate();
+
+  avancer.encodeurGauche = ENCODER_Read(Gauche);
+  avancer.encodeurDroite = ENCODER_Read(Droite);
+
+  if (avancer.valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
+  {
+    avancer.valeurGauche += (millis() - avancer.beginMillis)/10000.0;
+    avancer.valeurDroite += (millis() - avancer.beginMillis)/10000.0;
+  }
+  else if (avancer.valeurGauche >= speedLimit) {
+    avancer.hasAccelerated = 1;
+  }
+
+  //ajustement
+  if ( avancer.encodeurGauche / ratioTour < avancer.encodeurDroite)
+  {
+    OutputRight = 0;
+    InputLeft = avancer.encodeurGauche;
+    SetpointLeft = avancer.encodeurDroite;
+    myPIDLeft.compute();
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche + OutputLeft * ratioTour);
+  }
+
+  else if ( avancer.encodeurGauche / ratioTour > avancer.encodeurDroite)
+  {
+    OutputLeft = 0;
+    InputRight = avancer.encodeurDroite;
+    SetpointRight = avancer.encodeurGauche;
+    myPIDRight.compute();
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite + OutputRight);
+  }
+  else
+  {
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche* ratioTour);
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite);
+  }
+
+/*
+ Serial.print(avancer.encodeurGauche);
+ Serial.print("     ");
+ Serial.print(OutputLeft);
+ Serial.print("     ");
+ Serial.print(avancer.encodeurDroite);
+ Serial.print("     ");
+ Serial.print(OutputRight);
+ Serial.print("     ");
+ Serial.print(avancer.valeurGauche);
+ Serial.print("     ");
+ Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
+ Serial.println();
+ */
 }
 
 void slowDown(int target = TARGET_SLOW)
