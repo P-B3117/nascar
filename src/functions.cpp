@@ -139,20 +139,7 @@ void tournedroit(float valeurGauche,float valeurDroite){
  }
 }
 
-
- struct {
-  bool isMoving = 0;
-  bool hasAccelerated = 0;
-  long encodeurGauche = 0;
-  long encodeurDroite = 0;
-  float beginMillis = 0;
-  int posInTurn = 0;
-  int posOverflow = 0;
-  int valeurGauche = 0;
-  int valeurDroite = 0;
-} avancer;
-
-void avance(float speedLimit = 0.8)
+void avance(float speedLimit = SPEEDLIMIT)
 {
   if (avancer.isMoving == false)
   {
@@ -214,12 +201,12 @@ void avance(float speedLimit = 0.8)
  */
 }
 
-void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE)
+void slowDown(int target = TARGET_SLOW)
  {
-  avancerUpdate();
 
-  long encodeurGauche = ENCODER_Read(Gauche);
-  long encodeurDroite = ENCODER_Read(Droite);
+  while (avancer.encodeurDroite < target &&  avancer.encodeurGauche < target)
+  {
+  avancerUpdate();
 
   if ( target/10 - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)  <= TARGET_SLOW/10  && valeurGauche > VITESSE_AVANCE_GAUCHE)
   {
@@ -251,7 +238,27 @@ void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUC
     MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
     MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
- }
+   if ( avancer.encodeurGauche > target || avancer.encodeurDroite> target )
+  {
+    if (avancer.encodeurGauche> target){
+        MOTOR_SetSpeed(Gauche,0);
+      if (avancer.encodeurDroite> target){
+        MOTOR_SetSpeed(Droite,0);
+        return;
+       } 
+    }
+    else if (avancer.encodeurDroite> target){
+        MOTOR_SetSpeed(Droite,0);
+
+        if (avancer.encodeurGauche> target){
+        MOTOR_SetSpeed(Gauche,0);
+        return;
+      } 
+    }
+  }
+  }
+  avancerReset();
+}
 
 
 bool detectionSifflet (){
@@ -290,4 +297,13 @@ void avancerUpdate()
   }
 
   avancer.posInTurn = ( avancer.encodeurGauche + avancer.encodeurDroite ) /2 + avancer.posOverflow
+}
+
+void avancerReset()
+{
+  avancer.isMoving = false;
+  avancer.hasAccelerated = false;
+  avancer.beginMillis = 0;
+  avancer.valeurGauche = VITESSE_AVANCE_GAUCHE;
+  avancer.valeurDroite = VITESSE_AVANCE_DROITE;
 }
