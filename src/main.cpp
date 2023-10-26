@@ -15,8 +15,8 @@ void setup()
   couleurINIT();
  
 
-  while (!detectionSifflet()== true || ROBUS_IsBumper(2)==true){
-    couleurInitiale = 2;
+  while (!detectionSifflet()== true || detection_distance_bas()<30){
+    couleurInitiale = getCouleur();
   }
   
 }
@@ -28,6 +28,9 @@ void loop()
   Serial.print("    ");
   Serial.println(ENCODER_Read(0));
   */
+  //Serial.println(getCouleur());
+ //Serial.println(detectionSifflet());
+// Serial.println(detection_distance_bas());
   switch(couleurInitiale){
     case JAUNE:
     avance();

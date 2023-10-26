@@ -361,3 +361,11 @@ void avancerReset()
   myPIDLeft.reset();
   myPIDRight.reset();
 }
+bool bumper(int x){
+  if (ROBUS_IsBumper(x)==true){
+    return true;
+  }
+  else{
+    return false;
+  }
+}

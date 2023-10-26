@@ -67,3 +67,5 @@ void couleurINIT();
 int getCouleur();
 
 bool detectionSifflet ();
+
+bool bumper(int x);
