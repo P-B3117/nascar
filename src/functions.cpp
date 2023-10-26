@@ -82,7 +82,10 @@ void create()
 }
 
 void tournegauche( float valeurGauche, float valeurDroite ){
- 
+    ENCODER_Reset(0);
+    ENCODER_Reset(1);
+
+
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
 
@@ -112,33 +115,43 @@ void tournegauche( float valeurGauche, float valeurDroite ){
 
 
 void tournedroit(float valeurGauche,float valeurDroite){
+
+    ENCODER_Reset(0);
+    ENCODER_Reset(1);
  
     MOTOR_SetSpeed(Gauche,valeurGauche);
     MOTOR_SetSpeed(Droite,valeurDroite);
 
   int encodeurGauche = ENCODER_Read(Gauche);
   int encodeurDroite = ENCODER_Read(Droite);
+  Serial.println(ENCODER_Read(Gauche));
+  Serial.println(ENCODER_Read(Droite));
   
   if (encodeurGauche>1942 || encodeurDroite<-1942 )
   {
     if (encodeurGauche>1942){
         MOTOR_SetSpeed(Gauche,0);
+        Serial.println("je tourne1");
       if (encodeurDroite<-1942){
         MOTOR_SetSpeed(Droite,0);
+        Serial.println("je tourne2");
         return;
        } 
     }
     else if (encodeurDroite<-1942){
         MOTOR_SetSpeed(Droite,0);
+        Serial.println("je tourne3");
 
         if (encodeurGauche>1942){
         MOTOR_SetSpeed(Gauche,0);
+        Serial.println("je tourne4");
         return;
        } 
   }
 
 
  }
+  Serial.println("je tourne5");
 }
 
 /*

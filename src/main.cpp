@@ -35,28 +35,35 @@ void loop()
  //Serial.println(detectionSifflet());
 // Serial.println(detection_distance_bas());
   switch(couleurInitiale){
-    case VERT:
+    case BLEU:
 
-      switch(etape){
-      
+      switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
+        if(detection_distance_haut() < 120){
         avance();
-        if (detection_distance_haut()>120){
-          slowDown();
+        Serial.println("j'avance");
         }
-        if (getCouleur()==JAUNE){
-          avance(0);
-          etape ++; 
-        }
+        else{
+          etape ++;
+          }
         break;
         
+       
       case 2://on tourne 90 sur jaune
-        tournedroit(0.05,0.05);// tourne 90
-        if (detection_distance_haut()<120){
-          etape ++; 
+        slowDown();
+        Serial.println("j'arrete");
+        etape++;
+        break;
+
+      case 3:
+        tournedroit(0.15,-0.15);
+        Serial.println("jai fini");
+        if (ENCODER_Read(Gauche)>1942 && ENCODER_Read(Droite)<-1942){
+        etape++;
         }
         break;
-      /* 
+      }
+       /* 
       case 3:// avance tapis
         avance(0.05);
         if (detection_distance_haut()>120){
@@ -88,11 +95,11 @@ void loop()
         etape ++;
         break;      
 */
-    }
-      break;
+ 
     
 
     case JAUNE: //Parcour a effectuer couleur initiale jaune  
+    
     break;
     }
-    }
+  }
