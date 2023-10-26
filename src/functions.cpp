@@ -237,23 +237,30 @@ while ( millis() < beginMillis + 100 ) {}
 }
 
 
-bool tourne()
+void tourne()
 {
 
   float speedLimit = 0.6;
   float ratioTour = 1.59;
   int beginMillis = millis();
-  bool hasTurned = false;
+  bool hasTurnedLeft = false;
+  bool hasTurnedRight = false;
+  int targetGauche = 12800;
+  int targetDroite = 6400;
 /*
   switch (getCouleur())
   {
   
   case VERT:
     ratioTour = 1.59;
+    targetGauche = 12800;
+    targetDroite = 6400;
     break;
   
   case JAUNE:
     ratioTour = 1.28;
+    targetGauche = 19200;
+    targetDroite = 12800
     break;
   
   }*/
@@ -264,7 +271,7 @@ bool tourne()
    avancer.encodeurGauche = ENCODER_Read(Gauche);
    avancer.encodeurDroite = ENCODER_Read(Droite);
 
-  while (!hasTurned)
+  while (!hasTurnedRight or !hasTurnedLeft)
   {
 
   if (avancer.isMoving == false)
@@ -333,13 +340,12 @@ bool tourne()
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
 
-if (true) hasTurned = true;
+if (avancer.encodeurGauche > targetGauche) { MOTOR_SetSpeed(Gauche,0); hasTurnedLeft = true; }
+if (avancer.encodeurDroite > targetDroite) { MOTOR_SetSpeed(Droite,0); hasTurnedRight = true; }
 
 }
 
  avancerReset();
-
- return hasTurned;
 }
 
 void slowDown(int target = TARGET_SLOW)
