@@ -19,7 +19,7 @@
 //define pour avancer
 #define VITESSE_AVANCE_GAUCHE 0.3
 #define VITESSE_AVANCE_DROITE 0.3
-#define SPEEDLIMIT 0.4
+#define SPEEDLIMIT 0.7
 #define SPEEDLIMITLENT 0.4
 
 //define pour slowDown

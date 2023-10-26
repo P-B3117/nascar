@@ -178,6 +178,9 @@ void avance(float speedLimit = SPEEDLIMIT)
     avancer.hasAccelerated = 1;
   }
 
+  MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
+  MOTOR_SetSpeed(Droite, avancer.valeurDroite);
+
   //ajustement
   if ( avancer.encodeurGauche < avancer.encodeurDroite)
   {
