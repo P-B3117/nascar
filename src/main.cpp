@@ -8,7 +8,7 @@
 int couleurInitiale = 0;
 
 //variable algo
-int etape = 3;
+int etape = 1;
 void setup()
 {
   BoardInit();
@@ -42,41 +42,52 @@ void loop()
       case 1: //ligne depart avance jusqua fin mur
         avance();
         if (detection_distance_haut()>120){
+          slowDown();
+        }
+        if (getCouleur()==JAUNE){
+          avance(0);
           etape ++; 
         }
         break;
         
-      case 2://on tourne
-        slowDown();// pour tourne droite
+      case 2://on tourne 90 sur jaune
+        tournedroit(0.05,0.05);// tourne 90
         if (detection_distance_haut()<120){
           etape ++; 
         }
         break;
-       
+      /* 
       case 3:// avance tapis
-        avance();
+        avance(0.05);
         if (detection_distance_haut()>120){
           etape ++; 
         }
         break;
-      case 4:
-        avance();
+      case 4://avance jusqua jaune
+        avance(0.05);
         if (getCouleur()==JAUNE){
-          avance(0.05);
-          if (detection_distance_bas()<20){
-            avance(0.05);
-            if (detection_distance_bas()>120){
-              slowDown();
-              etape ++;
-            }
-          }
+          etape ++;
         }
         break;
-      case 5://on tourne 90
+      
+      case 5:  //avance quand voit poutre 
+        avance(0.05);
+        if (detection_distance_bas()<70){
+          etape ++;
+        }
+        break;
+      case 6:   //arrete quand pu poutre
+        avance(0.05);
+        if (detection_distance_bas()>120){
+              avance(0);
+              etape ++;
+            }       
+        break;
+      case 7://on tourne 90
         slowDown();// pour tourne droite 90
         etape ++;
         break;      
-
+*/
     }
       break;
     
