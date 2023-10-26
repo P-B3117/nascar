@@ -40,8 +40,10 @@ unsigned long interval = 1000;
 
 //detecteur de couleur
  tcs34725 rgb_sensor;
+ nice avancer;
 
  //structure pour avancer
+ 
 
 
 float detection_distance_bas (void){
@@ -139,6 +141,20 @@ void tournedroit(float valeurGauche,float valeurDroite){
  }
 }
 
+/*
+struct nice{
+  bool isMoving = false;
+  bool hasAccelerated = false;
+  long encodeurGauche = 0;
+  long encodeurDroite = 0;
+  float beginMillis = 0;
+  int posInTurn = 0;
+  int posOverflow = 0;
+  int valeurGauche = VITESSE_AVANCE_GAUCHE;
+  int valeurDroite = VITESSE_AVANCE_DROITE;
+} avancer;
+*/
+
 void avance(float speedLimit = SPEEDLIMIT)
 {
   if (avancer.isMoving == false)
@@ -185,7 +201,7 @@ void avance(float speedLimit = SPEEDLIMIT)
     MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
 
-/*
+
  Serial.print(avancer.encodeurGauche);
  Serial.print("     ");
  Serial.print(OutputLeft);
@@ -198,24 +214,38 @@ void avance(float speedLimit = SPEEDLIMIT)
  Serial.print("     ");
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
- */
+ 
 }
 
 void slowDown(int target = TARGET_SLOW)
  {
 
-  while (avancer.encodeurDroite < target &&  avancer.encodeurGauche < target)
-  {
-  avancerUpdate();
+  int beginMillis = millis();
 
+  myPIDLeft.reset();
+  myPIDRight.reset();
+
+   avancer.encodeurGauche = ENCODER_ReadReset(Gauche);
+   avancer.encodeurDroite = ENCODER_ReadReset(Droite);
+   avancer.posOverflow += ( avancer.encodeurGauche + avancer.encodeurDroite )/2;
+   avancer.encodeurGauche = ENCODER_Read(Gauche);
+   avancer.encodeurDroite = ENCODER_Read(Droite);
+
+  while (avancer.encodeurDroite < target or  avancer.encodeurGauche < target)
+  {
+
+    
+   avancer.encodeurGauche = ENCODER_Read(Gauche);
+   avancer.encodeurDroite = ENCODER_Read(Droite);
+
+   
   if ( target/10 - ( (avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0)  <= TARGET_SLOW/10  && avancer.valeurGauche > VITESSE_AVANCE_GAUCHE)
   {
-    avancer.valeurGauche -= 0.1;
-    avancer.valeurDroite -= 0.1;
-    //valeurGauche -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
-    //valeurDroite -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+    float decel = ( ( -( (long)millis() - beginMillis ) ) / 10000.0 ) + 0.1;
+    avancer.valeurGauche -= decel;
+    avancer.valeurDroite -= decel;
   }
-
+/*
    if ( avancer.encodeurGauche < avancer.encodeurDroite)
   {
     OutputRight = 0;
@@ -224,7 +254,6 @@ void slowDown(int target = TARGET_SLOW)
     myPIDLeft.compute();
     MOTOR_SetSpeed(Gauche, avancer.valeurGauche + OutputLeft);
   }
-
   else if ( avancer.encodeurGauche > avancer.encodeurDroite)
   {
     OutputLeft = 0;
@@ -238,25 +267,48 @@ void slowDown(int target = TARGET_SLOW)
     MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
     MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
-   if ( avancer.encodeurGauche > target || avancer.encodeurDroite> target )
-  {
-    if (avancer.encodeurGauche> target){
-        MOTOR_SetSpeed(Gauche,0);
-      if (avancer.encodeurDroite> target){
-        MOTOR_SetSpeed(Droite,0);
-        return;
-       } 
-    }
-    else if (avancer.encodeurDroite> target){
-        MOTOR_SetSpeed(Droite,0);
+  */
 
-        if (avancer.encodeurGauche> target){
-        MOTOR_SetSpeed(Gauche,0);
-        return;
-      } 
-    }
+  MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
+  MOTOR_SetSpeed(Droite, avancer.valeurDroite);
+
+  if (avancer.encodeurGauche > target) { MOTOR_SetSpeed(Gauche,0); }
+  if (avancer.encodeurDroite > target) { MOTOR_SetSpeed(Droite,0); }
+  
+  
+ Serial.print(avancer.encodeurGauche);
+ Serial.print("     ");
+ Serial.print(OutputLeft);
+ Serial.print("     ");
+ Serial.print(avancer.encodeurDroite);
+ Serial.print("     ");
+ Serial.print(OutputRight);
+ Serial.print("     ");
+ Serial.print(avancer.valeurGauche);
+ Serial.print("     ");
+ Serial.print(avancer.valeurDroite);
+ Serial.print("     ");
+ Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
+ Serial.println();
+ delay(100);
   }
-  }
+
+Serial.print(avancer.encodeurGauche);
+ Serial.print("     ");
+ Serial.print(OutputLeft);
+ Serial.print("     ");
+ Serial.print(avancer.encodeurDroite);
+ Serial.print("     ");
+ Serial.print(OutputRight);
+ Serial.print("     ");
+ Serial.print(avancer.valeurGauche);
+ Serial.print("     ");
+ Serial.print(avancer.valeurDroite);
+ Serial.print("     ");
+ Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
+ Serial.println();
+  
+  avancerUpdate();
   avancerReset();
 }
 
@@ -306,4 +358,6 @@ void avancerReset()
   avancer.beginMillis = 0;
   avancer.valeurGauche = VITESSE_AVANCE_GAUCHE;
   avancer.valeurDroite = VITESSE_AVANCE_DROITE;
+  myPIDLeft.reset();
+  myPIDRight.reset();
 }
