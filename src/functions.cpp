@@ -152,7 +152,7 @@ void avance(float speedLimit = SPEEDLIMIT)
   avancer.encodeurGauche = ENCODER_Read(Gauche);
   avancer.encodeurDroite = ENCODER_Read(Droite);
 
-  if (valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
+  if (avancer.valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
   {
     avancer.valeurGauche += (millis() - avancer.beginMillis)/10000.0;
     avancer.valeurDroite += (millis() - avancer.beginMillis)/10000.0;
@@ -208,10 +208,10 @@ void slowDown(int target = TARGET_SLOW)
   {
   avancerUpdate();
 
-  if ( target/10 - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)  <= TARGET_SLOW/10  && valeurGauche > VITESSE_AVANCE_GAUCHE)
+  if ( target/10 - ( (avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0)  <= TARGET_SLOW/10  && avancer.valeurGauche > VITESSE_AVANCE_GAUCHE)
   {
-    valeurGauche -= 0.1;
-    valeurDroite -= 0.1;
+    avancer.valeurGauche -= 0.1;
+    avancer.valeurDroite -= 0.1;
     //valeurGauche -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
     //valeurDroite -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
   }
@@ -296,7 +296,7 @@ void avancerUpdate()
     avancer.encodeurDroite = ENCODER_ReadReset(Droite);
   }
 
-  avancer.posInTurn = ( avancer.encodeurGauche + avancer.encodeurDroite ) /2 + avancer.posOverflow
+  avancer.posInTurn = ( avancer.encodeurGauche + avancer.encodeurDroite ) /2 + avancer.posOverflow;
 }
 
 void avancerReset()
