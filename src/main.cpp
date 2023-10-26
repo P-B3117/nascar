@@ -15,8 +15,9 @@ void setup()
   couleurINIT();
  
 
-  while (!detectionSifflet()== true || detection_distance_bas()<30){
+  while (!detectionSifflet()==true ){
     couleurInitiale = getCouleur();
+    
   }
   
 }
@@ -32,14 +33,18 @@ void loop()
  //Serial.println(detectionSifflet());
 // Serial.println(detection_distance_bas());
   switch(couleurInitiale){
-    case JAUNE:
+    case VERT:
+   
     avance();
-
+    if (detection_distance_haut()>120){
+      Serial.println("****************************************************************************************************************");
+      slowDown();
+    }
+   
     break;
+  
 
-
-
-    case VERT: //Parcour a effectuer couleur initiale jaune
+    case JAUNE: //Parcour a effectuer couleur initiale jaune
     
     break;
   }

@@ -159,14 +159,12 @@ void avance(float speedLimit = SPEEDLIMIT)
 {
   if (avancer.isMoving == false)
   {
-  avancer.isMoving = true;    
+  avancer.isMoving = true;
+  avancer.hasAccelerated = false;   
   avancer.beginMillis = millis();
   }
 
   avancerUpdate();
-
-  avancer.encodeurGauche = ENCODER_Read(Gauche);
-  avancer.encodeurDroite = ENCODER_Read(Droite);
 
   if (avancer.valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
   {
@@ -214,6 +212,8 @@ void avance(float speedLimit = SPEEDLIMIT)
  Serial.print("     ");
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
+
+ delay(20);
  
 }
 
@@ -343,9 +343,11 @@ void avancerUpdate()
 
   if (avancer.encodeurGauche >= 30000 or avancer.encodeurDroite >= 30000)
   {
-    avancer.posOverflow += ( avancer.encodeurGauche + avancer.encodeurDroite )/2;
     avancer.encodeurGauche = ENCODER_ReadReset(Gauche);
     avancer.encodeurDroite = ENCODER_ReadReset(Droite);
+    avancer.posOverflow += ( avancer.encodeurGauche + avancer.encodeurDroite )/2;
+    avancer.encodeurGauche = ENCODER_Read(Gauche);
+    avancer.encodeurDroite = ENCODER_Read(Droite);
   }
 
   avancer.posInTurn = ( avancer.encodeurGauche + avancer.encodeurDroite ) /2 + avancer.posOverflow;
