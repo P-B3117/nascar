@@ -41,6 +41,8 @@ unsigned long interval = 1000;
 //detecteur de couleur
  tcs34725 rgb_sensor;
 
+ //structure pour avancer
+
 
 float detection_distance_bas (void){
     float tension_bas=ROBUS_ReadIR(BAS);
@@ -137,95 +139,84 @@ void tournedroit(float valeurGauche,float valeurDroite){
  }
 }
 
-void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION)
+
+ struct {
+  bool isMoving = 0;
+  bool hasAccelerated = 0;
+  long encodeurGauche = 0;
+  long encodeurDroite = 0;
+  float beginMillis = 0;
+  int posInTurn = 0;
+  int posOverflow = 0;
+  int valeurGauche = 0;
+  int valeurDroite = 0;
+} avancer;
+
+void avance(float speedLimit = 0.8)
 {
-  bool isDecelerating = 0;
-
-  ENCODER_Reset(Gauche);
-  ENCODER_Reset(Droite);
-  
-  MOTOR_SetSpeed(Gauche,valeurGauche + 0.01);
-  MOTOR_SetSpeed(Droite,valeurDroite);
-
-  long encodeurGauche = ENCODER_Read(Gauche);
-  long encodeurDroite = ENCODER_Read(Droite);
-
-  float beginMillis = millis();
-
-while (encodeurGauche != target && encodeurDroite != target)
-{
-  MOTOR_SetSpeed(Gauche,valeurGauche);
-  MOTOR_SetSpeed(Droite,valeurDroite);
-
-  int encodeurGauche = ENCODER_Read(Gauche);
-  int encodeurDroite = ENCODER_Read(Droite);
-
-  if (valeurGauche < 0.8 && !isDecelerating) //acceleration
+  if (avancer.isMoving == false)
   {
-    valeurGauche += (millis() - beginMillis)/10000.0;
-    valeurDroite += (millis() - beginMillis)/10000.0;
+  avancer.isMoving = true;    
+  avancer.beginMillis = millis();
+  }
+
+  avancerUpdate();
+
+  avancer.encodeurGauche = ENCODER_Read(Gauche);
+  avancer.encodeurDroite = ENCODER_Read(Droite);
+
+  if (valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
+  {
+    avancer.valeurGauche += (millis() - avancer.beginMillis)/10000.0;
+    avancer.valeurDroite += (millis() - avancer.beginMillis)/10000.0;
+  }
+  else if (avancer.valeurGauche >= speedLimit) {
+    avancer.hasAccelerated = 1;
   }
 
   //ajustement
-  if ( encodeurGauche< encodeurDroite)
+  if ( avancer.encodeurGauche < avancer.encodeurDroite)
   {
     OutputRight = 0;
-    InputLeft = encodeurGauche;
-    SetpointLeft = encodeurDroite;
+    InputLeft = avancer.encodeurGauche;
+    SetpointLeft = avancer.encodeurDroite;
     myPIDLeft.compute();
-    MOTOR_SetSpeed(Gauche, valeurGauche + OutputLeft);
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche + OutputLeft);
   }
 
-  else if ( encodeurGauche> encodeurDroite)
+  else if ( avancer.encodeurGauche > avancer.encodeurDroite)
   {
     OutputLeft = 0;
-    InputRight = encodeurDroite;
-    SetpointRight = encodeurGauche;
+    InputRight = avancer.encodeurDroite;
+    SetpointRight = avancer.encodeurGauche;
     myPIDRight.compute();
-    MOTOR_SetSpeed(Droite, valeurDroite + OutputRight);
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite + OutputRight);
   }
   else
   {
-    MOTOR_SetSpeed(Gauche,valeurGauche);
-    MOTOR_SetSpeed(Droite,valeurDroite);
-  }
-  if (encodeurGauche> target || encodeurDroite> target )
-  {
-    if (encodeurGauche> target){
-        MOTOR_SetSpeed(Gauche,0);
-      if (encodeurDroite> target){
-        MOTOR_SetSpeed(Droite,0);
-        return;
-       } 
-    }
-    else if (encodeurDroite> target){
-        MOTOR_SetSpeed(Droite,0);
-
-        if (encodeurGauche> target){
-        MOTOR_SetSpeed(Gauche,0);
-        return;
-       } 
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
 
- }
-
- Serial.print(encodeurGauche);
+/*
+ Serial.print(avancer.encodeurGauche);
  Serial.print("     ");
  Serial.print(OutputLeft);
  Serial.print("     ");
- Serial.print(encodeurDroite);
+ Serial.print(avancer.encodeurDroite);
  Serial.print("     ");
  Serial.print(OutputRight);
  Serial.print("     ");
- Serial.print(valeurGauche);
+ Serial.print(avancer.valeurGauche);
  Serial.print("     ");
- Serial.print((encodeurGauche/10 + encodeurDroite/10) / 2.0);
+ Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
-}
+ */
 }
 
 void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE)
  {
+  avancerUpdate();
 
   long encodeurGauche = ENCODER_Read(Gauche);
   long encodeurDroite = ENCODER_Read(Droite);
@@ -236,6 +227,29 @@ void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUC
     valeurDroite -= 0.1;
     //valeurGauche -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
     //valeurDroite -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
+  }
+
+   if ( avancer.encodeurGauche < avancer.encodeurDroite)
+  {
+    OutputRight = 0;
+    InputLeft = avancer.encodeurGauche;
+    SetpointLeft = avancer.encodeurDroite;
+    myPIDLeft.compute();
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche + OutputLeft);
+  }
+
+  else if ( avancer.encodeurGauche > avancer.encodeurDroite)
+  {
+    OutputLeft = 0;
+    InputRight = avancer.encodeurDroite;
+    SetpointRight = avancer.encodeurGauche;
+    myPIDRight.compute();
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite + OutputRight);
+  }
+  else
+  {
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche);
+    MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
  }
 
@@ -263,3 +277,17 @@ bool detectionSifflet (){
 
 }
 
+void avancerUpdate()
+{
+  avancer.encodeurGauche = ENCODER_Read(Gauche);
+  avancer.encodeurDroite = ENCODER_Read(Droite);
+
+  if (avancer.encodeurGauche >= 30000 or avancer.encodeurDroite >= 30000)
+  {
+    avancer.posOverflow += ( avancer.encodeurGauche + avancer.encodeurDroite )/2;
+    avancer.encodeurGauche = ENCODER_ReadReset(Gauche);
+    avancer.encodeurDroite = ENCODER_ReadReset(Droite);
+  }
+
+  avancer.posInTurn = ( avancer.encodeurGauche + avancer.encodeurDroite ) /2 + avancer.posOverflow
+}

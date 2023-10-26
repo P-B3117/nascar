@@ -17,7 +17,6 @@
 #define VITESSE_TOURNEDROITE_DROITE -0.1
 
 //define pour avancer
-#define TARGET_POSITION 30000
 #define VITESSE_AVANCE_GAUCHE 0.3
 #define VITESSE_AVANCE_DROITE 0.3
 
@@ -36,7 +35,7 @@ void tournegauche(float valeurGauche, float valeurDroite );
 
 void tournedroit(float valeurGauche,float valeurDroite);
 
-void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION);
+void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITESSE_AVANCE_DROITE, float speedLimit);
 
 void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE);
 
