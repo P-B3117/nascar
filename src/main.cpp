@@ -8,7 +8,7 @@
 int couleurInitiale = 0;
 
 //variable algo
-int etape = 1;
+int etape = 3;
 void setup()
 {
   BoardInit();
@@ -62,9 +62,17 @@ void loop()
       case 4:
         avance();
         if (getCouleur()==JAUNE){
-          
+          avance(0.05);
+          if (detection_distance_bas()<20){
+            avance(0.05);
+            if (detection_distance_bas()>120){
+              slowDown();
+              etape ++;
+            }
+          }
         }
-      case 5://on tourne encore
+        break;
+      case 5://on tourne 90
         slowDown();// pour tourne droite 90
         etape ++;
         break;      
