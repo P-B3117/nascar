@@ -50,6 +50,8 @@ void tournegauche(float valeurGauche, float valeurDroite ); //legacy, pas touche
 
 void tournedroit(float valeurGauche,float valeurDroite); //legacy, pas touche tourne de 90deg
 
+void tourne();
+
 void avance(float speedLimit = SPEEDLIMIT); //avance continuellement
 
 void slowDown(int target = TARGET_SLOW);  //ralenti
@@ -57,8 +59,6 @@ void slowDown(int target = TARGET_SLOW);  //ralenti
 void avancerUpdate();
 
 void avancerReset();
-
-void avancerINIT();
 
 void create();
 
