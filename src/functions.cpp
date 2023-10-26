@@ -157,6 +157,9 @@ struct nice{
 
 void avance(float speedLimit = SPEEDLIMIT)
 {
+  
+ int beginMillis = millis();
+
   if (avancer.isMoving == false)
   {
   avancer.isMoving = true;
@@ -213,7 +216,7 @@ void avance(float speedLimit = SPEEDLIMIT)
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
 
- delay(20);
+while ( millis() < beginMillis + 100 ) {}
  
 }
 
@@ -289,7 +292,7 @@ void tourne()
     MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
 
-
+/*
  Serial.print(avancer.encodeurGauche);
  Serial.print("     ");
  Serial.print(OutputLeft);
@@ -302,7 +305,7 @@ void tourne()
  Serial.print("     ");
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
- 
+ */
 }
 
 void slowDown(int target = TARGET_SLOW)
