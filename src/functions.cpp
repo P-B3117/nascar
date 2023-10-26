@@ -224,32 +224,35 @@ while ( millis() < beginMillis + 100 ) {}
 }
 
 
-void tourne()
+bool tourne()
 {
 
-  float speedLimit = 0.4;
-  int ratioTour = 0;
-
+  float speedLimit = 0.6;
+  float ratioTour = 1.59;
+  int beginMillis = millis();
+  bool hasTurned = false;
+/*
   switch (getCouleur())
   {
-  case BLEU:
-    ratioTour = 2/0.1;
-    break;
   
   case VERT:
-    ratioTour = 2/1;
+    ratioTour = 1.59;
     break;
   
   case JAUNE:
-    ratioTour = 3/2;
+    ratioTour = 1.28;
     break;
   
-  case ROUGE:
-    ratioTour = 4/3;
-    break;
-  
-  
-  }
+  }*/
+
+   avancer.encodeurGauche = ENCODER_ReadReset(Gauche);
+   avancer.encodeurDroite = ENCODER_ReadReset(Droite);
+   avancer.posOverflow += ( avancer.encodeurGauche + avancer.encodeurDroite )/2;
+   avancer.encodeurGauche = ENCODER_Read(Gauche);
+   avancer.encodeurDroite = ENCODER_Read(Droite);
+
+  while (!hasTurned)
+  {
 
   if (avancer.isMoving == false)
   {
@@ -262,7 +265,7 @@ void tourne()
   avancer.encodeurGauche = ENCODER_Read(Gauche);
   avancer.encodeurDroite = ENCODER_Read(Droite);
 
-  if (avancer.valeurGauche < speedLimit && !avancer.hasAccelerated) //acceleration
+  if (avancer.valeurGauche * ratioTour < speedLimit && !avancer.hasAccelerated) //acceleration
   {
     avancer.valeurGauche += (millis() - avancer.beginMillis)/10000.0;
     avancer.valeurDroite += (millis() - avancer.beginMillis)/10000.0;
@@ -271,6 +274,10 @@ void tourne()
     avancer.hasAccelerated = 1;
   }
 
+  
+  MOTOR_SetSpeed(Gauche, avancer.valeurGauche * ratioTour);
+  MOTOR_SetSpeed(Droite, avancer.valeurDroite);
+
   //ajustement
   if ( avancer.encodeurGauche / ratioTour < avancer.encodeurDroite)
   {
@@ -278,7 +285,7 @@ void tourne()
     InputLeft = avancer.encodeurGauche;
     SetpointLeft = avancer.encodeurDroite;
     myPIDLeft.compute();
-    MOTOR_SetSpeed(Gauche, avancer.valeurGauche + OutputLeft * ratioTour);
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche * ratioTour + OutputLeft );
   }
 
   else if ( avancer.encodeurGauche / ratioTour > avancer.encodeurDroite)
@@ -291,11 +298,13 @@ void tourne()
   }
   else
   {
-    MOTOR_SetSpeed(Gauche, avancer.valeurGauche* ratioTour);
+    MOTOR_SetSpeed(Gauche, avancer.valeurGauche * ratioTour);
     MOTOR_SetSpeed(Droite, avancer.valeurDroite);
   }
 
-/*
+  while ( millis() < beginMillis + 100 ) {}
+
+
  Serial.print(avancer.encodeurGauche);
  Serial.print("     ");
  Serial.print(OutputLeft);
@@ -304,11 +313,20 @@ void tourne()
  Serial.print("     ");
  Serial.print(OutputRight);
  Serial.print("     ");
- Serial.print(avancer.valeurGauche);
+ Serial.print(avancer.valeurGauche * ratioTour);
+ Serial.print("     ");
+ Serial.print(avancer.valeurDroite);
  Serial.print("     ");
  Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
  Serial.println();
- */
+
+if (true) hasTurned = true;
+
+}
+
+ avancerReset();
+
+ return hasTurned;
 }
 
 void slowDown(int target = TARGET_SLOW)
@@ -387,21 +405,6 @@ void slowDown(int target = TARGET_SLOW)
  delay(100);
   }
 
-Serial.print(avancer.encodeurGauche);
- Serial.print("     ");
- Serial.print(OutputLeft);
- Serial.print("     ");
- Serial.print(avancer.encodeurDroite);
- Serial.print("     ");
- Serial.print(OutputRight);
- Serial.print("     ");
- Serial.print(avancer.valeurGauche);
- Serial.print("     ");
- Serial.print(avancer.valeurDroite);
- Serial.print("     ");
- Serial.print((avancer.encodeurGauche/10 + avancer.encodeurDroite/10) / 2.0);
- Serial.println();
-  
   avancerUpdate();
   avancerReset();
 }
