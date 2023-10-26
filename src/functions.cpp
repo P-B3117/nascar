@@ -7,8 +7,8 @@
 
 //détecteur de distance
 //define
-#define BAS 2
-#define HAUT 3
+#define BAS 3
+#define HAUT 2
 
 //PID
 //define
@@ -268,7 +268,7 @@ bool detectionSifflet (){
   amplitude = abs(moyenneSifflet - mic); 
   //Serial.println(amplitude);
 
-  if(amplitude>700){
+  if(amplitude>300){
     if(currentMillis-previousMillis > interval){
       siffletActif = true;
       }
