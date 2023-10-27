@@ -36,7 +36,6 @@ void setup(){
 
 
 void loop(){
-  while(etat!=10){
   computePIDLigneDroite(3200,3200,0.3,0.3);
         Serial.print(ENCODER_Read(Droite));
         Serial.print("      ");
@@ -77,7 +76,7 @@ void loop(){
 
 */
 
-}
+
 
 void setTarget(float t, float deltat, float x, float y){
 
@@ -239,10 +238,6 @@ void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroi
   }
   else{
     MOTOR_SetSpeed(Gauche,pwrGauche);
-  }
-  if(posDroite>=targetDroit && posGauche>=targetGauche){
-
-    etat++;
   }
   //store previous error
   eprevDroite = eDroite;
