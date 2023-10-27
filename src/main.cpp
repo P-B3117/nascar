@@ -30,6 +30,12 @@ void setup(){
   BoardInit();
   Serial.begin(9600);
   couleurINIT();
+
+
+while(!detectionSifflet() == true){
+  couleurInitiale = getCouleur();
+  }
+  
 }
 
 
@@ -37,17 +43,20 @@ void loop(){
   
   switch(couleurInitiale){
 
-    case VERT:
+    case BLEU:
       switch(etat){
         
         case 1:
         computePID(20000,20000,pwrLimit,pwrLimit);//position (droite,gauche,pwrLimitDroit,pwrLimitGauche)
-  
         Serial.print(ENCODER_Read(Droite));
         Serial.print("      ");
         Serial.println(ENCODER_Read(Gauche));
-        
-        
+
+        if(detection_distance_haut>120){
+          ENCODER_Reset(Droite);
+          ENCODER_Reset(Gauche);
+          etat++;
+        }       
         break;
 
       }
