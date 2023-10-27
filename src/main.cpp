@@ -32,16 +32,19 @@ void setup(){
   couleurINIT();
 
 
-while(!detectionSifflet() == true){
-  couleurInitiale = getCouleur();
-  }
-  
 }
 
 
 void loop(){
-  //computePID(10000,10000,0.3,0.31);
-  computePIDLigneDroite(3200,3200,0.3,0.31);
+  while(etat!=10){
+  computePIDLigneDroite(3200,3200,0.3,0.3);
+        Serial.print(ENCODER_Read(Droite));
+        Serial.print("      ");
+        Serial.println(ENCODER_Read(Gauche));
+
+  }
+
+  //computePIDLigneDroite(3200,3200,0.3,0.3);
  /* switch(couleurInitiale){
 
     case BLEU:
@@ -186,8 +189,8 @@ void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroi
   // set target position
   setTarget(currT/1.0e6,deltaT, targetDroit, targetGauche);
 
-  int posDroite = ENCODER_ReadReset(Droite);
-  int posGauche = ENCODER_ReadReset(Gauche);
+  int posDroite = ENCODER_Read(Droite);
+  int posGauche = ENCODER_Read(Gauche);
 
   // erreur
   int eDroite = target[0] - posDroite;
@@ -226,16 +229,20 @@ void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroi
   //Signal to motor
   //il faut ajouter une -Valeur a la condition pour arriver au valeurs pile que nous voulons
   if(posDroite>=targetDroit){
-    MOTOR_SetSpeed(Droite,0);
+    MOTOR_SetSpeed(Droite,pwrDroite);
   }
   else{
     MOTOR_SetSpeed(Droite,pwrDroite);
   }
   if(posGauche>=targetGauche){
-    MOTOR_SetSpeed(Gauche,0);
+    MOTOR_SetSpeed(Gauche,pwrGauche);
   }
   else{
     MOTOR_SetSpeed(Gauche,pwrGauche);
+  }
+  if(posDroite>=targetDroit && posGauche>=targetGauche){
+
+    etat++;
   }
   //store previous error
   eprevDroite = eDroite;
