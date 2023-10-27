@@ -62,7 +62,7 @@ void loop()
       
       
         
-      case 3:// avance a coter poutre jusquau verre et arrete d'avancer sur plan
+      case 3:// avance a coter poutre jusquau verre et arrete d'avancer sur
         computePIDLigneDroite(3200,3200,0.3,0.305);//enttre ligne droite dans le futur
         Serial.println("j'avance");
         if (detection_distance_haut()<20){

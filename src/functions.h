@@ -75,3 +75,5 @@ void setTarget(float t, float deltat, float x, float y);
 void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche);
 
 void computePID(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche);
+
+int suiveur_ligne();
