@@ -53,6 +53,16 @@ unsigned long interval = 1000;
  tcs34725 rgb_sensor;
  nice avancer;
 
+
+// valeur suiveur ligne
+#define AUCUN 0
+#define GAUCHE 1
+#define CENTRE 2
+#define DROITE 3
+#define GAUCHEETCENTRE 4
+#define GAUCHEETDROITE 5
+#define CENTREETDROITE 6
+#define TOUT 7
  //structure pour avancer
  
 
@@ -640,13 +650,13 @@ void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroi
   //Signal to motor
   //il faut ajouter une -Valeur a la condition pour arriver au valeurs pile que nous voulons
   if(posDroite>=targetDroit){
-    MOTOR_SetSpeed(Droite,0);
+    MOTOR_SetSpeed(Droite,pwrDroite);
   }
   else{
     MOTOR_SetSpeed(Droite,pwrDroite);
   }
   if(posGauche>=targetGauche){
-    MOTOR_SetSpeed(Gauche,0);
+    MOTOR_SetSpeed(Gauche,pwrDroite);
   }
   else{
     MOTOR_SetSpeed(Gauche,pwrGauche);

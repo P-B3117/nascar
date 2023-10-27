@@ -39,7 +39,7 @@ void loop()
  //Serial.println(detectionSifflet());
  //Serial.println(detection_distance_haut());
   switch(couleurInitiale){
-    case BLEU:
+    case JAUNE:
 
       switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
