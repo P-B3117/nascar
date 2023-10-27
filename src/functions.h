@@ -45,3 +45,5 @@ void couleurINIT();
 int getCouleur();
 
 bool detectionSifflet ();
+
+void computePID();
