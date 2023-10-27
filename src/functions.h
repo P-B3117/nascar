@@ -47,3 +47,5 @@ int getCouleur();
 bool detectionSifflet ();
 
 void computePID(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche);
+
+void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche);

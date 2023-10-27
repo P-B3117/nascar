@@ -55,7 +55,7 @@ bool detectionSifflet (){
   amplitude = abs(moyenneSifflet - mic); 
   //Serial.println(amplitude);
 
-  if(amplitude>700){
+  if(amplitude>300){
     if(currentMillis-previousMillis > interval){
       siffletActif = true;
       }
