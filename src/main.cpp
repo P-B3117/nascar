@@ -35,11 +35,32 @@ void setup(){
 
 void loop(){
   
-  computePID(3200,3200);//position (droite,gauche)
+  switch(couleurInitiale){
+
+    case VERT:
+      switch(etat){
+        
+        case 1:
+        computePID(20000,20000,pwrLimit,pwrLimit);//position (droite,gauche,pwrLimitDroit,pwrLimitGauche)
   
-  Serial.print(ENCODER_Read(Droite));
-  Serial.print("      ");
-  Serial.println(ENCODER_Read(Gauche));
+        Serial.print(ENCODER_Read(Droite));
+        Serial.print("      ");
+        Serial.println(ENCODER_Read(Gauche));
+        
+        
+        break;
+
+      }
+    break;
+
+
+    case JAUNE:
+
+    break;
+    
+
+  }
+
 
 
 
@@ -56,7 +77,7 @@ void setTarget(float t, float deltat, float x, float y){
   target[1] = (long) target_f[1];
 }
 
-void computePID(int targetDroit, int targetGauche){
+void computePID(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche){
 
   
   // PID constants Droite
@@ -99,16 +120,16 @@ void computePID(int targetDroit, int targetGauche){
   // moteur power
   float pwrDroite = fabs(uDroite);
   float pwrGauche = fabs(uGauche);
-  if(pwrDroite>pwrLimit){
+  if(pwrDroite>pwrLimitDroit){
 
-    pwrDroite=pwrLimit;
+    pwrDroite=pwrLimitDroit;
     if(targetDroit<0){
       pwrDroite = pwrDroite*-1;
     }
   }
-  if(pwrGauche>pwrLimit){
+  if(pwrGauche>pwrLimitGauche){
 
-    pwrGauche=pwrLimit;
+    pwrGauche=pwrLimitGauche;
     if(targetGauche<0){
       pwrGauche = pwrGauche*-1;
     }
