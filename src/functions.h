@@ -40,8 +40,6 @@ void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE,float valeurDroite = VITE
 
 void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE);
 
-void create();
-
 void couleurINIT();
 
 int getCouleur();

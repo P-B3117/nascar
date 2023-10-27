@@ -13,23 +13,6 @@
 //PID
 //define
 
-#define pLeft  0.0006
-#define iLeft  0.001
-#define dLeft  0
-
-#define pRight 0.0006
-#define iRight 0.001
-#define dRight 0
-
-ArduPID myPIDLeft;
-ArduPID myPIDRight;
-
-double   KpLeft = pLeft, KiLeft = iLeft, KdLeft = dLeft;
-double   KpRight = pRight, KiRight = iRight, KdRight = dRight;
-
-double SetpointLeft, InputLeft, OutputLeft;
-double SetpointRight, InputRight, OutputRight;
-
 
 //Variable global Sifflet
 int mic ; //valeur de lecture du micro
@@ -68,14 +51,7 @@ int getCouleur() {
 }
 
 
-void create()
-{
-    myPIDLeft.begin(&InputLeft, &OutputLeft, &SetpointLeft, KpLeft, KiLeft, KdLeft);
-    myPIDRight.begin(&InputRight, &OutputRight, &SetpointRight, KpRight, KiRight, KdRight);
 
-    myPIDLeft.setOutputLimits(0,0.1);
-    myPIDRight.setOutputLimits(0,0.1);
-}
 
 void tournegauche( float valeurGauche, float valeurDroite ){
  
@@ -136,7 +112,7 @@ void tournedroit(float valeurGauche,float valeurDroite){
 
  }
 }
-
+/*
 void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION)
 {
   bool isDecelerating = 0;
@@ -238,7 +214,7 @@ void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUC
     //valeurDroite -= (target - ( (encodeurGauche/10 + encodeurDroite/10) / 2.0)) / 2000.0;
   }
  }
-
+*/
 
 bool detectionSifflet (){
 
