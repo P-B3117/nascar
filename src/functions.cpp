@@ -10,9 +10,6 @@
 #define BAS 2
 #define HAUT 3
 
-//PID
-//define
-
 
 //Variable global Sifflet
 int mic ; //valeur de lecture du micro
@@ -51,8 +48,30 @@ int getCouleur() {
 }
 
 
+bool detectionSifflet (){
 
+  unsigned long currentMillis = millis();
+  mic = analogRead(micpin);
+  amplitude = abs(moyenneSifflet - mic); 
+  //Serial.println(amplitude);
 
+  if(amplitude>700){
+    if(currentMillis-previousMillis > interval){
+      siffletActif = true;
+      }
+    }
+
+  else{
+    previousMillis = currentMillis;
+    siffletActif = false;
+  }
+  Serial.println(siffletActif);
+
+  return siffletActif;
+
+}
+
+/*
 void tournegauche( float valeurGauche, float valeurDroite ){
  
     MOTOR_SetSpeed(Gauche,valeurGauche);
@@ -114,7 +133,7 @@ void tournedroit(float valeurGauche,float valeurDroite){
 }
 
 
-/*
+
 void avance(float valeurGauche = VITESSE_AVANCE_GAUCHE, float valeurDroite = VITESSE_AVANCE_DROITE, int target = TARGET_POSITION)
 {
   bool isDecelerating = 0;
@@ -218,26 +237,4 @@ void slowDown(int target = TARGET_SLOW, float valeurGauche = VITESSE_AVANCE_GAUC
  }
 */
 
-bool detectionSifflet (){
-
-  unsigned long currentMillis = millis();
-  mic = analogRead(micpin);
-  amplitude = abs(moyenneSifflet - mic); 
-  //Serial.println(amplitude);
-
-  if(amplitude>700){
-    if(currentMillis-previousMillis > interval){
-      siffletActif = true;
-      }
-    }
-
-  else{
-    previousMillis = currentMillis;
-    siffletActif = false;
-  }
-  Serial.println(siffletActif);
-
-  return siffletActif;
-
-}
 

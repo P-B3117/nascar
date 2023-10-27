@@ -23,6 +23,8 @@ float target_f[] = {0.0,0.0};
 long target[] = {0,0};
 
 
+//etat
+int etat = 1;
 
 void setup(){
   BoardInit();
@@ -33,19 +35,19 @@ void setup(){
 
 void loop(){
   
-  computePID();
+  computePID(3200,3200);//position (droite,gauche)
   
   Serial.print(ENCODER_Read(Droite));
   Serial.print("      ");
   Serial.println(ENCODER_Read(Gauche));
 
-  
+
 
 }
 
-void setTarget(float t, float deltat){
+void setTarget(float t, float deltat, float x, float y){
 
-  float positionChange[2] = {3200,3200};
+  float positionChange[2] = {x,y};// ici on lui donne ces targets
   for(int k = 0; k<2; k++){
 
     target_f[k] = target_f[k]+positionChange[k];
@@ -54,7 +56,7 @@ void setTarget(float t, float deltat){
   target[1] = (long) target_f[1];
 }
 
-void computePID(){
+void computePID(int targetDroit, int targetGauche){
 
   
   // PID constants Droite
@@ -73,11 +75,14 @@ void computePID(){
   prevT = currT; 
 
   // set target position
-  setTarget(currT/1.0e6,deltaT);
+  setTarget(currT/1.0e6,deltaT, targetDroit, targetGauche);
+
+  int posDroite = ENCODER_Read(Droite);
+  int posGauche = ENCODER_Read(Gauche);
 
   // erreur
-  int eDroite = target[0] - ENCODER_Read(Droite);
-  int eGauche = target[1] - ENCODER_Read(Gauche);
+  int eDroite = target[0] - posDroite;
+  int eGauche = target[1] - posGauche;
 
   //derive
   float dedtDroite = (eDroite-eprevDroite)/(deltaT);
@@ -97,15 +102,32 @@ void computePID(){
   if(pwrDroite>pwrLimit){
 
     pwrDroite=pwrLimit;
+    if(targetDroit<0){
+      pwrDroite = pwrDroite*-1;
+    }
   }
   if(pwrGauche>pwrLimit){
 
     pwrGauche=pwrLimit;
+    if(targetGauche<0){
+      pwrGauche = pwrGauche*-1;
+    }
   }
 
   //Signal to motor
-  MOTOR_SetSpeed(Droite,pwrDroite);
-  MOTOR_SetSpeed(Gauche,pwrGauche);
+  //il faut ajouter une -Valeur a la condition pour arriver au valeurs pile que nous voulons
+  if(posDroite>=targetDroit){
+    MOTOR_SetSpeed(Droite,0);
+  }
+  else{
+    MOTOR_SetSpeed(Droite,pwrDroite);
+  }
+  if(posGauche>=targetGauche){
+    MOTOR_SetSpeed(Gauche,0);
+  }
+  else{
+    MOTOR_SetSpeed(Gauche,pwrGauche);
+  }
   //store previous error
   eprevDroite = eDroite;
   eprevGauche = eGauche;

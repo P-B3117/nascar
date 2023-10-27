@@ -46,4 +46,4 @@ int getCouleur();
 
 bool detectionSifflet ();
 
-void computePID();
+void computePID(int targetDroit, int targetGauche);
