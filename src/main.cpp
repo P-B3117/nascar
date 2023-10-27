@@ -28,7 +28,7 @@ void loop(){
   int target = 3200;
   
   // PID constants Droite
-  float kpDroite = 0.01;
+  float kpDroite = 0.001;
   float kdDroite = 0;
   float kiDroite = 0;
 
@@ -39,7 +39,7 @@ void loop(){
   prevT = currT; 
 
   // erreur
-  int e = target - ENCODER_Read(Droite);
+  int e = target - ENCODER_ReadReset(Droite);
 
   //derive
   float dedt = (e-eprev)/(deltaT);
@@ -65,5 +65,7 @@ void loop(){
 
   //Serial.println(target);
   Serial.println(posDroite);
+
+  
 
 }
