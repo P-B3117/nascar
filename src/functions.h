@@ -7,5 +7,7 @@
 #define GAUCHEETDROITE 5
 #define CENTREETDROITE 6
 #define TOUT 7
-
-int suiveur_ligne();
+#define MOTORGAUCHE 0
+#define MOTORDROITE 1
+int detecteur_ligne();
+void suiveur_ligne(float power);

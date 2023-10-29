@@ -13,6 +13,6 @@ void setup() {
 }
 
 void loop() {
-  suiveur_ligne();
-delay(100);
+detecteur_ligne();
+delay(500);
 }
