@@ -20,7 +20,7 @@ void setup()
 // SERVO_SetAngle(1,180);
   
 
-  while (!detectionSifflet()==true ){
+  while (!detectionSifflet()==true  ){
     couleurInitiale = getCouleur();
     Serial.println(couleurInitiale);
   }
@@ -63,13 +63,13 @@ void loop()
       
         
       case 3:// avance a coter poutre jusquau verre et arrete d'avancer sur
-        computePIDLigneDroite(3200,3200,0.3,0.305);//enttre ligne droite dans le futur
+        computePIDLigneDroite(3200,3200,0.3,0.3);//enttre ligne droite dans le futur
         Serial.println("j'avance");
         if (detection_distance_haut()<20){
           Serial.println("servo!!!!!");
           SERVO_SetAngle(1,40);
           delay(20); 
-          computePIDLigneDroite(3200,3200,0.3,0.305);
+          computePIDLigneDroite(3200,3200,0.3,0.3);
           if (getCouleur()==BLANC){
           etape ++;
           }

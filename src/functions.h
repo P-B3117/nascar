@@ -27,7 +27,7 @@
 
 //define pour sifflet
 #define micpin A7
-#define moyenneSifflet 300
+#define moyenneSifflet 700
 
 //Global pour avancer
  struct nice{
