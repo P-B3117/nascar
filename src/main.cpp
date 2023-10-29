@@ -14,5 +14,5 @@ void setup() {
 
 void loop() {
   suiveur_ligne();
-delay(500);
+delay(100);
 }
