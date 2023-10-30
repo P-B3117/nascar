@@ -81,3 +81,21 @@ void suiveur_ligne(float power){
         }*/
     }       
 }
+
+void suiveur_ligne_blanc(float power){
+    if (detecteur_ligne()==GAUCHEETCENTRE){
+        MOTOR_SetSpeed(LEFT,power);
+        MOTOR_SetSpeed(RIGHT,power*1.5);
+        while (detecteur_ligne()==DROITE) {}
+    }
+    else if (detecteur_ligne()==CENTREETDROITE){
+        MOTOR_SetSpeed(LEFT,power*1.5);
+        MOTOR_SetSpeed(RIGHT,power);   
+        while (detecteur_ligne()==CENTREETDROITE){}
+    }
+    else{
+        MOTOR_SetSpeed(LEFT,power);
+        MOTOR_SetSpeed(RIGHT,power);
+    }
+    
+}
