@@ -670,9 +670,100 @@ void computePIDLigneDroite(int targetDroit, int targetGauche, float pwrLimitDroi
   eprevDroite = eDroite;
   eprevGauche = eGauche;
 }
+void computePIDTourneDroite(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche, int pointFinDroite, int pointFinGauche){
+
+  
+  // PID constants Droite
+  float kpDroite = 0.000999;
+  float kdDroite = 0.000000001;
+  float kiDroite = 0.0;
+
+  float kpGauche = 0.000999;
+  float kdGauche = 0.000000001;
+  float kiGauche = 0.0;
+
+  //time difference
+  long currT = micros();
+
+  float deltaT = ((float)(currT-prevT))/1.0e6;
+  prevT = currT; 
+
+  // set target position
+  setTarget(currT/1.0e6,deltaT, targetDroit, targetGauche);
+
+  int posDroiteCourante = ENCODER_Read(Droite);
+  int posGaucheCourante = ENCODER_Read(Gauche);
+  int posDroiteAncienne;
+  int posGaucheAncienne;
+
+  // erreur
+  int eDroite = target[0] - posDroiteCourante;
+  int eGauche = target[1] - posGaucheCourante;
+
+  //derive
+  float dedtDroite = (eDroite-eprevDroite)/(deltaT);
+  float dedtGauche = (eGauche-eprevGauche)/(deltaT);
+
+  //integral
+  eintegralDroite = eintegralDroite + eDroite*deltaT;
+  eintegralGauche = eintegralGauche + eGauche*deltaT;
+
+  //control signal
+  float uDroite = kpDroite*eDroite + kdDroite*dedtDroite + kiDroite*eintegralDroite;
+  float uGauche = kpGauche*eGauche + kdGauche*dedtGauche + kiGauche*eintegralGauche;
+
+  // moteur power
+  float pwrDroite = fabs(uDroite);
+  float pwrGauche = fabs(uGauche);
+  if(pwrDroite>pwrLimitDroit){
+
+    pwrDroite=pwrLimitDroit;
+    if(targetDroit<0){
+      pwrDroite = pwrDroite*-1;
+    }
+  }
+  if(pwrGauche>pwrLimitGauche){
+
+    pwrGauche=pwrLimitGauche;
+    if(targetGauche<0){
+      pwrGauche = pwrGauche*-1;
+    }
+  }
+
+  //Signal to motor
+  //il faut ajouter une -Valeur a la condition pour arriver au valeurs pile que nous voulons
+  if(posDroiteCourante>=targetDroit){
+    posDroiteAncienne = posDroiteCourante-targetDroit;
+    MOTOR_SetSpeed(Droite,pwrDroite);
+  }
+  else{
+    MOTOR_SetSpeed(Droite,pwrDroite);
+    posGaucheAncienne = posGaucheCourante-targetGauche;
+  }
+  if(posGaucheCourante>=targetGauche){
+    posGaucheAncienne = posGaucheCourante-targetGauche;
+    MOTOR_SetSpeed(Gauche,pwrGauche);
+  }
+  else{
+    MOTOR_SetSpeed(Gauche,pwrGauche);
+  }
+
+  if(posDroiteCourante>=pointFinDroite){
+
+    MOTOR_SetSpeed(Droite, 0);
+  }
+
+  if(posGaucheCourante>=pointFinGauche){
+
+    MOTOR_SetSpeed(Gauche, 0);
+  }
+  //store previous error
+  eprevDroite = eDroite;
+  eprevGauche = eGauche;
+}
 
 
-void computePIDSuiveurMur(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche){
+void computePIDSuiveurMur(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche, float distanceMur, float distanceCible){
 
   
   // PID constants Droite

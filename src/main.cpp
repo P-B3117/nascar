@@ -33,11 +33,20 @@ void setup()
 
 void loop()
 {
+  //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
+<<<<<<< HEAD
   computePID(14488,18582, 0.200, 0.257);
   Serial.print(ENCODER_Read(1));
   Serial.print("    ");
   Serial.println(ENCODER_Read(0));
+=======
+  //Serial.print(ENCODER_Read(1));
+  //Serial.print("    ");
+  //Serial.println(ENCODER_Read(0));
+  Serial.println(detection_distance_haut());
+
+>>>>>>> aaae73795839275c9d7649a0a209b3f28a776576
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
