@@ -1,12 +1,10 @@
 {
-  "cmake.configureOnOpen": false,
-  "C_Cpp.errorSquiggles": "disabled",
-  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "C:/Users/alexi/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
   "C_Cpp_Runner.cppCompilerPath": "C:/Users/alexi/.platformio/packages/toolchain-atmelavr/bin/avr-g++.exe",
   "C_Cpp_Runner.debuggerPath": "gdb",
   "C_Cpp_Runner.cStandard": "gnu11",
   "C_Cpp_Runner.cppStandard": "gnu++11",
+  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.useMsvc": false,
   "C_Cpp_Runner.warnings": [
     "-Wall",
@@ -54,6 +52,10 @@
     "C:/Users/alexi/.platformio/packages/framework-arduino-avr/libraries/HID/src",
     ""
   ],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
   "C_Cpp_Runner.excludeSearch": [
     "**/build",
     "**/build/**",
@@ -67,9 +69,5 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "C_Cpp_Runner.includeSearch": [
-    "*",
-    "**/*"
-  ]
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }
