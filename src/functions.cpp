@@ -67,15 +67,15 @@ void suiveur_ligne(float power){
         Serial.println("tout dorit");
     }*/
     else if(detecteur_ligne()==GAUCHEETCENTRE){
-        MOTOR_SetSpeed(MOTORGAUCHE,power);
-        MOTOR_SetSpeed(MOTORDROITE,power/2.5);
+        MOTOR_SetSpeed(MOTORGAUCHE,power+0.1);
+        MOTOR_SetSpeed(MOTORDROITE,power);
         /*while (detecteur_ligne()!=GAUCHEETDROITE){
         Serial.println("vers la droite");
         }*/
     }
     else if(detecteur_ligne()==CENTREETDROITE){
-        MOTOR_SetSpeed(MOTORGAUCHE,power/2.5);
-        MOTOR_SetSpeed(MOTORDROITE,power);
+        MOTOR_SetSpeed(MOTORGAUCHE,power);
+        MOTOR_SetSpeed(MOTORDROITE,power+0.1);
        /* while(detecteur_ligne()!=GAUCHEETDROITE){
         Serial.println("vers la gauche");
         }*/
