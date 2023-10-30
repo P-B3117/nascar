@@ -33,11 +33,12 @@ void setup()
 
 void loop()
 {
-  
+  //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-  Serial.print(ENCODER_Read(1));
-  Serial.print("    ");
-  Serial.println(ENCODER_Read(0));
+  //Serial.print(ENCODER_Read(1));
+  //Serial.print("    ");
+  //Serial.println(ENCODER_Read(0));
+  Serial.println(detection_distance_haut());
 
   
  //Serial.println(getCouleur());

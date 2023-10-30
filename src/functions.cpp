@@ -763,7 +763,7 @@ void computePIDTourneDroite(int targetDroit, int targetGauche, float pwrLimitDro
 }
 
 
-void computePIDSuiveurMur(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche){
+void computePIDSuiveurMur(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche, float distanceMur, float distanceCible){
 
   
   // PID constants Droite
