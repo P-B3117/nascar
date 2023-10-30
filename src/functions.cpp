@@ -2,8 +2,8 @@
 #include <Arduino.h>
 #include <LibRobus.h>
 #include "ArduPID.h"
-#define BAS 3
-#define HAUT 2
+#define BAS 0
+#define HAUT 1
 
 
 
