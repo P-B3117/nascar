@@ -5,11 +5,11 @@
 #include <stdio.h>
 #define SPEED 0.3
 //variable globale couleur
-int couleurInitiale = 0;
+int couleurInitiale;
 
 
 //variable algo
-int etape = 1;
+int etape =3;// 1;
 
 int position; 
 
@@ -34,14 +34,15 @@ void setup()
 void loop()
 {
 
-  Serial.print(ENCODER_Read(1));
-  Serial.print("    ");
+  //Serial.print(ENCODER_Read(1));
+ // Serial.print("    ");
   
   //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
- //Serial.println(detection_distance_haut());
+ Serial.print("bas:");
+ Serial.println(detection_distance_haut());
   switch(couleurInitiale){
-    case JAUNE:
+    case BLANC:
 
       switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
@@ -67,34 +68,22 @@ void loop()
       
       
         
-      case 3:// avance a coter poutre jusquau verre et arrete d'avancer sur
-        computePIDLigneDroite(3200,3200,SPEED,SPEED);//enttre ligne droite dans le futur
-        Serial.println("j'avance");
-        if (ENCODER_Read(1)>1000){
-          etape ++;
-        }
+      
 
-      case 4:
-        while (detection_distance_haut()<20){
+      case 3:
+      computePIDLigneDroite(3200,3200,SPEED,SPEED);
+        if (detection_distance_haut()<20){
           Serial.println("servo!!!!!");
           position=ENCODER_Read(1);
           SERVO_SetAngle(1,0);
           delay(20); 
           }
-        if (ENCODER_Read(1)>position+300){
+        if (detection_distance_bas()>120){
             SERVO_SetAngle(1,160);
             etape ++;
           }
-          break;
-      case 5:
-        if (detection_distance_bas()>120){
-         // SERVO_SetAngle(1,160);
-          etape ++;
-          }
-        
+          break;      
        
-        
-        break;
       
       /*case 4:
       
@@ -104,7 +93,7 @@ void loop()
       }
       break;
 */
-      case 6:
+      case 4:
       Serial.print("case 4");
       computePID(0,0,0,0);
       break;
