@@ -34,6 +34,7 @@ void setup()
 void loop()
 {
   //computePID(3200,3200,0.3,0.3);
+  computePID(14488,18582, 0.200, 0.257);
   Serial.print(ENCODER_Read(1));
   Serial.print("    ");
   Serial.println(ENCODER_Read(0));
