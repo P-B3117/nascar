@@ -33,10 +33,10 @@ void setup()
 
 void loop()
 {
-  computePIDLigneDroite(3200,3200,0.3,0.3);
+  //computePID(3200,3200,0.3,0.3);
   Serial.print(ENCODER_Read(1));
   Serial.print("    ");
-  //Serial.println(ENCODER_Read(0));
+  Serial.println(ENCODER_Read(0));
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
