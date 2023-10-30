@@ -48,8 +48,7 @@ void loop()
         
         computePIDLigneDroite(3200,3200,SPEED,SPEED);
         Serial.println("j'avance");
-        Serial.println(ENCODER_Read(0));
-  
+
         if(detection_distance_haut() > 120){
           Serial.println("IF");
           etape ++;
@@ -71,19 +70,29 @@ void loop()
       case 3:// avance a coter poutre jusquau verre et arrete d'avancer sur
         computePIDLigneDroite(3200,3200,SPEED,SPEED);//enttre ligne droite dans le futur
         Serial.println("j'avance");
-        if (detection_distance_haut()<20){
-          
+        if (ENCODER_Read(1)>1000){
+          etape ++;
+        }
+
+      case 4:
+        while (detection_distance_haut()<20){
           Serial.println("servo!!!!!");
+          position=ENCODER_Read(1);
           SERVO_SetAngle(1,0);
           delay(20); 
-          computePIDLigneDroite(3200,3200,SPEED,SPEED);
-          if (getCouleur()==BLANC){
+          }
+        if (ENCODER_Read(1)>position+300){
+            SERVO_SetAngle(1,160);
+            etape ++;
+          }
+          break;
+      case 5:
+        if (detection_distance_bas()>120){
+         // SERVO_SetAngle(1,160);
           etape ++;
           }
-        }
-        else if (getCouleur()==BLANC){
-          etape++;
-        }
+        
+       
         
         break;
       
@@ -95,7 +104,7 @@ void loop()
       }
       break;
 */
-      case 4:
+      case 6:
       Serial.print("case 4");
       computePID(0,0,0,0);
       break;
