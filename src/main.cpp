@@ -33,12 +33,14 @@ void setup()
 
 void loop()
 {
-
-  //Serial.print(ENCODER_Read(1));
- // Serial.print("    ");
+  computePIDLigneDroite(3200,3200,0.3,0.3);
+  Serial.print(ENCODER_Read(1));
+  Serial.print("    ");
+  //Serial.println(ENCODER_Read(0));
   
-  //Serial.println(getCouleur());
+ //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
+ /*
  Serial.print("bas:");
  Serial.println(detection_distance_haut());
   switch(couleurInitiale){
@@ -92,7 +94,7 @@ void loop()
         etape ++;
       }
       break;
-*/
+
       case 4:
       Serial.print("case 4");
       computePID(0,0,0,0);
@@ -101,6 +103,6 @@ void loop()
     case VERT: //Parcour a effectuer couleur initiale jaune  
     
     break;
-      
-  }
+   
+  }*/
   }
