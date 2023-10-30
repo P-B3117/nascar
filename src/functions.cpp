@@ -57,7 +57,7 @@ int detecteur_ligne()
 }
 bool extreme_droite(){
     float tension_extreme_gauche=analogRead(A2)*5.0/1023.2;
-    if(tension_extreme_gauche>1.8){
+    if(tension_extreme_gauche>1.0){
         return false;
     }
         else {
@@ -67,7 +67,8 @@ bool extreme_droite(){
 }
 bool extreme_gauche(){
     float tension_extreme_droite=analogRead(A8)*5.0/1023.0;
-    if(tension_extreme_droite>1.8){
+    Serial.println(tension_extreme_droite);
+    if(tension_extreme_droite>2.0){
         return false;
     }
     else{
@@ -80,6 +81,9 @@ bool extreme_gauche(){
 
 
 void suiveur_ligne(float power){
+    MOTOR_SetSpeed(RIGHT,power);
+    MOTOR_SetSpeed(LEFT,power);
+
    
     if(detecteur_ligne()==GAUCHEETDROITE){
         MOTOR_SetSpeed(MOTORGAUCHE,power);
@@ -100,16 +104,16 @@ void suiveur_ligne(float power){
         Serial.println("vers la gauche");
         }
     }  
-    else if (extreme_droite()==false)  {
+    /*else if (extreme_droite()==false)  {
         MOTOR_SetSpeed(MOTORGAUCHE,power);
         MOTOR_SetSpeed(MOTORDROITE,power*2);
-        while(extreme_droite()==false){}
+        while(detecteur_ligne()!=GAUCHEETCENTRE || detecteur_ligne()!=GAUCHEETDROITE){}
     } 
      else if (extreme_gauche()==false)  {
         MOTOR_SetSpeed(MOTORGAUCHE,power*2);
         MOTOR_SetSpeed(MOTORDROITE,power);
-        while(extreme_gauche()==false){}
-    } 
+        while(detecteur_ligne()!=CENTREETDROITE || detecteur_ligne()!=GAUCHEETDROITE){}
+    } */
 }
 
 void suiveur_ligne_blanc(float power){

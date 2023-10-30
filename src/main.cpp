@@ -15,5 +15,5 @@ void setup() {
 }
 
 void loop() {
- Serial.println(extreme_gauche());
+ suiveur_ligne(0.2);
 }
