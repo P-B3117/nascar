@@ -10,10 +10,10 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   BoardInit();
-  MOTOR_SetSpeed(MOTORGAUCHE,0.2);
-  MOTOR_SetSpeed(MOTORDROITE,0.2);
+  //MOTOR_SetSpeed(MOTORGAUCHE,0.2);
+  //MOTOR_SetSpeed(MOTORDROITE,0.2);
 }
 
 void loop() {
-suiveur_ligne(0.2);
+ Serial.println(extreme_gauche());
 }

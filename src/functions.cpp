@@ -8,8 +8,8 @@
 int detecteur_ligne()
 {
     int option;
-   float tension_suiveur=analogRead(A5)*5.0/1023.0;
-   Serial.println(tension_suiveur);
+    float tension_suiveur=analogRead(A5)*5.0/1023.0;
+    Serial.println(tension_suiveur);
     if(tension_suiveur<0.3){
         option=AUCUN;
         Serial.println("aucun   ");
@@ -55,31 +55,61 @@ int detecteur_ligne()
     }
     return option;
 }
+bool extreme_droite(){
+    float tension_extreme_gauche=analogRead(A2)*5.0/1023.2;
+    if(tension_extreme_gauche>1.8){
+        return false;
+    }
+        else {
+            return true;
+        }
+    
+}
+bool extreme_gauche(){
+    float tension_extreme_droite=analogRead(A8)*5.0/1023.0;
+    if(tension_extreme_droite>1.8){
+        return false;
+    }
+    else{
+        return true;
+    }
+
+
+}
+
+
 
 void suiveur_ligne(float power){
-    if (detecteur_ligne()==CENTRE){
-    MOTOR_SetSpeed(MOTORGAUCHE,power);
-    MOTOR_SetSpeed(MOTORDROITE,power);
-    }
-    /*if(detecteur_ligne()==GAUCHEETDROITE){
+   
+    if(detecteur_ligne()==GAUCHEETDROITE){
         MOTOR_SetSpeed(MOTORGAUCHE,power);
         MOTOR_SetSpeed(MOTORDROITE,power);
         Serial.println("tout dorit");
-    }*/
+    }
     else if(detecteur_ligne()==GAUCHEETCENTRE){
-        MOTOR_SetSpeed(MOTORGAUCHE,power+0.1);
+        MOTOR_SetSpeed(MOTORGAUCHE,power*1.5);
         MOTOR_SetSpeed(MOTORDROITE,power);
-        /*while (detecteur_ligne()!=GAUCHEETDROITE){
+        while (detecteur_ligne()!=GAUCHEETDROITE){
         Serial.println("vers la droite");
-        }*/
+        }
     }
     else if(detecteur_ligne()==CENTREETDROITE){
         MOTOR_SetSpeed(MOTORGAUCHE,power);
-        MOTOR_SetSpeed(MOTORDROITE,power+0.1);
-       /* while(detecteur_ligne()!=GAUCHEETDROITE){
+        MOTOR_SetSpeed(MOTORDROITE,power*1.5);
+        while(detecteur_ligne()!=GAUCHEETDROITE){
         Serial.println("vers la gauche");
-        }*/
-    }       
+        }
+    }  
+    else if (extreme_droite()==false)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,power);
+        MOTOR_SetSpeed(MOTORDROITE,power*2);
+        while(extreme_droite()==false){}
+    } 
+     else if (extreme_gauche()==false)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,power*2);
+        MOTOR_SetSpeed(MOTORDROITE,power);
+        while(extreme_gauche()==false){}
+    } 
 }
 
 void suiveur_ligne_blanc(float power){

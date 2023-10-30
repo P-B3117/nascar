@@ -12,3 +12,5 @@
 int detecteur_ligne();
 void suiveur_ligne(float power);
 void suiveur_ligne_blanc(float power);
+bool extreme_droite();
+bool extreme_gauche();
