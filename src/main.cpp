@@ -35,18 +35,9 @@ void loop()
 {
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-<<<<<<< HEAD
-  computePID(14488,18582, 0.200, 0.257);
   Serial.print(ENCODER_Read(1));
   Serial.print("    ");
   Serial.println(ENCODER_Read(0));
-=======
-  //Serial.print(ENCODER_Read(1));
-  //Serial.print("    ");
-  //Serial.println(ENCODER_Read(0));
-  Serial.println(detection_distance_haut());
-
->>>>>>> aaae73795839275c9d7649a0a209b3f28a776576
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
@@ -63,7 +54,6 @@ void loop()
         Serial.println("j'avance");
 
         if(detection_distance_haut() > 120){
-          Serial.println("IF");
           etape ++;
           }
         break;
@@ -71,7 +61,7 @@ void loop()
        
       case 2://on toune de jaune a jaune
        while(ENCODER_Read(LEFT)< 12800){//temporaire encodeur gauche ne marche pus
-       computePID(10000,12800,0.2,0.256);//trouver bonne donner
+      computePID(14488,18582, 0.200, 0.257);
        } 
        Serial.println("je tourne");
         etape++;
@@ -95,18 +85,8 @@ void loop()
             etape ++;
           }
           break;      
-       
       
-      /*case 4:
-      
-     
-      if (getCouleur()==BLANC){
-        etape ++;
-      }
-      break;
-
       case 4:
-      Serial.print("case 4");
       computePID(0,0,0,0);
       break;
       }
