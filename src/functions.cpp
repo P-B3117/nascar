@@ -853,58 +853,76 @@ void setTarget(float t, float deltat, float x, float y){
 
 
 
-int suiveur_ligne()
+int detecteur_ligne()
 {
     int option;
-   double tension_suiveur=analogRead(A5)*5.0/1024.0;
-   Serial.println(tension_suiveur);
+    float tension_suiveur=analogRead(A5)*5.0/1023.0;
+    Serial.println(tension_suiveur);
     if(tension_suiveur<0.3){
-        int option=AUCUN;
+        option=AUCUN;
         Serial.println("aucun   ");
         Serial.println(option);
         return option;
 
     }
-    else if(tension_suiveur > 2.3 && tension_suiveur<3){
-        int option=GAUCHE;
+    /*else if(tension_suiveur > 2.3 && tension_suiveur<3){
+        option=GAUCHE;
         Serial.println("gauche   ");
         Serial.println(option);
-        return option;
-    }
-    else if(tension_suiveur>1 && tension_suiveur<1.5){
+    }*/
+    /*else if(tension_suiveur>1 && tension_suiveur<1.5){
          int option=CENTRE;
         Serial.println("centre   ");
         Serial.println(option);
-        return option;
     }
-    else if (tension_suiveur>0.3 && tension_suiveur<1){
-         int option=DROITE;
+    /*else if (tension_suiveur>0.3 && tension_suiveur<1){
+        option=DROITE;
         Serial.println("droite   ");
         Serial.println(option);
-        return option;
-    }
-    else if(tension_suiveur>3.5 && tension_suiveur<4.3){
-         int option=GAUCHEETCENTRE;
+    }*/
+    else if(tension_suiveur>3.8 && tension_suiveur<4.8){
+        option=DROITE_SUIVEUR;
         Serial.println("gauche et centre   ");
         Serial.println(option);
-        return option;
     }
-    else if (tension_suiveur>3 && tension_suiveur<3.5){
-         int option=GAUCHEETDROITE;
+    else if (tension_suiveur>3 && tension_suiveur<3.8){
+        option=CENTRE;
         Serial.println("gauche et droite   ");
         Serial.println(option);
-        return option;
     }
     else if (tension_suiveur>1.5 && tension_suiveur<2.3){
-         int option=CENTREETDROITE;
+        option=GAUCHE_SUIVEUR;
         Serial.println("centre et droite  ");
         Serial.println(option);
-        return option;
     }
-    else if(tension_suiveur>4.3){
-         int option=TOUT;
+    /*else if(tension_suiveur>4.8){
+        option=TOUT;
         Serial.println("tout   ");
         Serial.println(option);
-        return option;
+        
+    }*/
+    return option;
+}
+bool extreme_droite(){
+    float tension_extreme_gauche=analogRead(A2);
+    //Serial.println(tension_extreme_gauche);
+    if(tension_extreme_gauche>200){
+        return true;
     }
+        else {
+            return false;
+        }
+    
+}
+bool extreme_gauche(){
+    float tension_extreme_droite=analogRead(A8)*5.0/1023.0;
+    //Serial.println(tension_extreme_droite);
+    if(tension_extreme_droite>2.0){
+        return true;
+    }
+    else{
+        return false;
+    }
+
+
 }
