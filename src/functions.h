@@ -81,3 +81,5 @@ void computePIDSuiveurMur(int targetDroit, int targetGauche, float pwrLimitDroit
 void computePIDTourneDroite(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche, int pointFinDroite, int pointFinGauche);
 
 int suiveur_ligne();
+
+void suiveur_mur(float power);
