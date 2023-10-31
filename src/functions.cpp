@@ -57,7 +57,8 @@ int detecteur_ligne()
 }
 bool extreme_droite(){
     float tension_extreme_gauche=analogRead(A2)*5.0/1023.2;
-    if(tension_extreme_gauche>1.0){
+    Serial.println(tension_extreme_gauche);
+    if(tension_extreme_gauche>2.0){
         return false;
     }
         else {
@@ -91,29 +92,29 @@ void suiveur_ligne(float power){
         Serial.println("tout dorit");
     }
     else if(detecteur_ligne()==GAUCHEETCENTRE){
-        MOTOR_SetSpeed(MOTORGAUCHE,power*1.5);
-        MOTOR_SetSpeed(MOTORDROITE,power);
-        while (detecteur_ligne()!=GAUCHEETDROITE){
+        MOTOR_SetSpeed(MOTORGAUCHE,power/2);
+        MOTOR_SetSpeed(MOTORDROITE,power/5);
+        while (detecteur_ligne()!=GAUCHEETDROITE && extreme_gauche()!=false){
         Serial.println("vers la droite");
         }
     }
     else if(detecteur_ligne()==CENTREETDROITE){
-        MOTOR_SetSpeed(MOTORGAUCHE,power);
-        MOTOR_SetSpeed(MOTORDROITE,power*1.5);
-        while(detecteur_ligne()!=GAUCHEETDROITE){
+        MOTOR_SetSpeed(MOTORGAUCHE,power/5);
+        MOTOR_SetSpeed(MOTORDROITE,power/2);
+        while(detecteur_ligne()!=GAUCHEETDROITE && extreme_droite()!=false){
         Serial.println("vers la gauche");
         }
     }  
-    /*else if (extreme_droite()==false)  {
-        MOTOR_SetSpeed(MOTORGAUCHE,power);
-        MOTOR_SetSpeed(MOTORDROITE,power*2);
-        while(detecteur_ligne()!=GAUCHEETCENTRE || detecteur_ligne()!=GAUCHEETDROITE){}
+    else if (extreme_droite()==false)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,power/2);
+        MOTOR_SetSpeed(MOTORDROITE,0);
+        while( detecteur_ligne()!=GAUCHEETDROITE){}
     } 
      else if (extreme_gauche()==false)  {
-        MOTOR_SetSpeed(MOTORGAUCHE,power*2);
-        MOTOR_SetSpeed(MOTORDROITE,power);
-        while(detecteur_ligne()!=CENTREETDROITE || detecteur_ligne()!=GAUCHEETDROITE){}
-    } */
+        MOTOR_SetSpeed(MOTORGAUCHE,0);
+        MOTOR_SetSpeed(MOTORDROITE,power/2);
+        while( detecteur_ligne()!=GAUCHEETDROITE){}
+    } 
 }
 
 void suiveur_ligne_blanc(float power){

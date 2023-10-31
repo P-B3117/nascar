@@ -15,5 +15,6 @@ void setup() {
 }
 
 void loop() {
- suiveur_ligne(0.2);
+ suiveur_ligne(0.3);
+ extreme_droite();
 }
