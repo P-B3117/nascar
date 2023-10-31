@@ -9,7 +9,7 @@ int couleurInitiale;
 
 
 //variable algo
-int etape =3;// 1;
+int etape =1;// 1;
 
 int position; 
 
@@ -35,17 +35,17 @@ void loop()
 {
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-  Serial.print(ENCODER_Read(1));
+  /*Serial.print(ENCODER_Read(1));
   Serial.print("    ");
-  Serial.println(ENCODER_Read(0));
+  Serial.println(ENCODER_Read(0));*/
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
- /*
- Serial.print("bas:");
- Serial.println(detection_distance_haut());
+ 
+ /*Serial.print("bas:");
+ Serial.println(detection_distance_haut());*/
   switch(couleurInitiale){
-    case BLANC:
+    case JAUNE:
 
       switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
@@ -54,17 +54,24 @@ void loop()
         Serial.println("j'avance");
 
         if(detection_distance_haut() > 120){
+          Serial.println("etape++");
           etape ++;
           }
         break;
         
        
-      case 2://on toune de jaune a jaune
-       while(ENCODER_Read(LEFT)< 12800){//temporaire encodeur gauche ne marche pus
-      computePID(14488,18582, 0.200, 0.257);
-       } 
+      case 2://on tourne de jaune a jaune
+       //while(ENCODER_Read(LEFT)< 12800)
+       //temporaire encodeur gauche ne marche plus
+       
+       computePID(14488,18582, 0.200, 0.257);
+       
+       
        Serial.println("je tourne");
+       if (ENCODER_Read(1)>14488){
         etape++;
+        Serial.println("fin tourner");
+        }
         break;
 
       
@@ -73,6 +80,7 @@ void loop()
       
 
       case 3:
+      Serial.println("case 3");
       computePIDLigneDroite(3200,3200,SPEED,SPEED);
         if (detection_distance_haut()<20){
           Serial.println("servo!!!!!");
@@ -90,9 +98,9 @@ void loop()
       computePID(0,0,0,0);
       break;
       }
-    case VERT: //Parcour a effectuer couleur initiale jaune  
+    /*case VERT: //Parcour a effectuer couleur initiale jaune  
     
-    break;
+    break;*/
    
-  }*/
   }
+}

@@ -512,7 +512,8 @@ bool bumper(int x){
 
 
 void computePID(int targetDroit, int targetGauche, float pwrLimitDroit, float pwrLimitGauche){
-
+    ENCODER_ReadReset(0);
+    ENCODER_ReadReset(1);
   
   // PID constants Droite
   float kpDroite = 0.000999;
