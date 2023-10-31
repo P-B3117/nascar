@@ -57,12 +57,14 @@ unsigned long interval = 1000;
 // valeur suiveur ligne
 #define AUCUN 0
 #define GAUCHE 1
-#define CENTRE 2
+//#define CENTRE 2
 #define DROITE 3
-#define GAUCHEETCENTRE 4
-#define GAUCHEETDROITE 5
-#define CENTREETDROITE 6
+#define DROITE_SUIVEUR 4
+#define CENTRE 5
+#define GAUCHE_SUIVEUR 6
 #define TOUT 7
+#define MOTORGAUCHE 0
+#define MOTORDROITE 1
  //structure pour avancer
  
 
