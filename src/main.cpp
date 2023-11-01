@@ -12,18 +12,14 @@ void setup() {
   Serial.begin(9600);
   BoardInit();
    SERVO_Enable(SERVO);
-   SERVO_SetAngle(SERVO,160);
+   SERVO_SetAngle(SERVO,30);
    while(ROBUS_IsBumper(3)==false){};
 }
 
 void loop() {
- if (ROBUS_IsBumper(3)==false) {
-  SERVO_SetAngle(SERVO,0);
-  }
+  SERVO_SetAngle(SERVO,130);
   
-  else if (ROBUS_IsBumper(3)==true) {
-    SERVO_SetAngle(SERVO,170);
-
-  }
+  
+ 
  
 }
