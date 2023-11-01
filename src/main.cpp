@@ -35,9 +35,9 @@ void loop()
 {
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-  Serial.print(ENCODER_Read(1));
-  Serial.print("    ");
-  Serial.println(ENCODER_Read(0));
+  //Serial.print(ENCODER_Read(1));
+  //Serial.print("    ");
+  //Serial.println(ENCODER_Read(0));
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
@@ -71,9 +71,9 @@ void loop()
        
        
        Serial.println("je tourne");
-       if (ENCODER_Read(1)>=14488){
-        ENCODER_ReadReset(0);
-        ENCODER_Read(1);
+       if (ENCODER_Read(RIGHT)>=14488 && ENCODER_Read(LEFT)>=18582){
+        ENCODER_ReadReset(RIGHT);
+        ENCODER_Read(LEFT);
         etape++;
         Serial.println("fin tourner");
         }
@@ -83,7 +83,7 @@ void loop()
       
       case 3:
       computePIDLigneDroite(3200,3200,SPEED,SPEED);
-      if (ENCODER_ReadReset(0)<8148){
+      if (detection_distance_haut()>120){
         etape++;
         ENCODER_ReadReset(0);
         ENCODER_ReadReset(1);
@@ -92,17 +92,15 @@ void loop()
         break;
       
       case 4:
-       if(ENCODER_Read(1<14488)){
        computePID(14488,18582, 0.200, 0.257);
       Serial.println("je tourne");
-      }
+      
        
        
       
-       if (ENCODER_Read(1)>=14488){
-        ENCODER_ReadReset(0);
-        ENCODER_ReadReset(1);
-        delay(20);
+       if (ENCODER_Read(RIGHT)>=14488 && ENCODER_Read(LEFT)>=18582){
+        ENCODER_ReadReset(RIGHT);
+        ENCODER_ReadReset(LEFT);
         etape++;
         Serial.println("fin tourner");
         }
