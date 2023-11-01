@@ -33,18 +33,20 @@ void suiveur_mur(float power){
         MOTOR_SetSpeed(LEFT,power);
 
     }
-    else if (detection_distance_haut()>=7 && detection_distance_haut()<40){//loin
+    else if (detection_distance_haut()>=7 && detection_distance_haut()<11){//loin
         MOTOR_SetSpeed(RIGHT,power);
         MOTOR_SetSpeed(LEFT,power+power/3);
     }
     
-    /*else if (detection_distance_haut()>=11 && detection_distance_haut()<40){//tres loin
+    else if (detection_distance_haut()>=11 && detection_distance_haut()<40){//tres loin
         MOTOR_SetSpeed(RIGHT,power);
-        MOTOR_SetSpeed(LEFT,power+power/3);
-    }*/
+        MOTOR_SetSpeed(LEFT,power+power/1.5);
+    }
     else if(detection_distance_haut()>120){
+       
         MOTOR_SetSpeed(RIGHT,0);
         MOTOR_SetSpeed(LEFT,power);
+        
     }
 
 

@@ -16,5 +16,5 @@ void setup() {
 
 void loop() {
  suiveur_mur(0.2);
-
+Serial.println(detection_distance_haut());
 }
