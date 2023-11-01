@@ -32,7 +32,12 @@ void setup()
 
 void loop()
 {
-//Serial.println(analogRead(A13));
+  if (couleurInitiale == JAUNE) couleurInitiale = ROUGE;
+  else if (couleurInitiale == VERT) couleurInitiale = BLEU;
+//Serial.println(analogRead(A12)*5.0/1023.0);
+//suiveur_ligne(0.2);
+//Serial.println(extreme_droite());
+//delay(500);
 //suiveur_mur_droit(0.2);
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
@@ -46,7 +51,7 @@ void loop()
  /*Serial.print("bas:");
  Serial.println(detection_distance_haut());*/
   switch(couleurInitiale){
-    case (JAUNE || ROUGE):
+    case ROUGE:
 
       switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
@@ -113,24 +118,130 @@ void loop()
        //rajouter detectio cup
         if (detection_distance_droite()>120){
             //SERVO_SetAngle(1,160);
+            ENCODER_ReadReset(RIGHT);
+            ENCODER_ReadReset(LEFT);
+
             etape ++;
           }
           break;      
       
       
       case 6:
-      suiveur_mur_droit(0.2);
-      if (detecteur_ligne()==DROITE_SUIVEUR ||detecteur_ligne()==GAUCHE_SUIVEUR || detecteur_ligne()==CENTRE){
-            //SERVO_SetAngle(1,160);
-            etape ++;
-          }
-      case 7:
-      suiveur_ligne(0.2);
-      break;
+      Serial.println("case 6");
+      computePID(2000,2000,0.2,0.2);
+      if (ENCODER_Read(RIGHT)>=2000){
+        ENCODER_Reset(RIGHT);
+        ENCODER_Reset(LEFT);
+        etape++;
       }
-    case VERT: //Parcour a effectuer couleur initiale jaune  
+      break;
+
+    case 7: 
+    Serial.println("case 7");
+    computePID(0,3884,0,0.2);
+    if (ENCODER_Read(LEFT)>=3884){
+      ENCODER_ReadReset(RIGHT);
+      ENCODER_ReadReset(LEFT);
+      etape++;
+    }
+    break;
+    case 8:
+    Serial.println("case 8");
+    computePID(3500,3500,0.2,0.2);
+    if (ENCODER_Read(LEFT)>=3500){
+      ENCODER_ReadReset(RIGHT);
+      ENCODER_ReadReset(LEFT);
+      etape++;
+    }
+
+    break;
+
+    case 9:
+    Serial.println("case 9");
+    computePID(1942,-1942,0.2,-0.2);
+    if (ENCODER_Read(RIGHT)>=1942){
+      ENCODER_ReadReset(RIGHT);
+      ENCODER_ReadReset(LEFT);
+      etape++;
+    }
+    break;
+    case 10:
+    Serial.println("suiveur ligne");
+    suiveur_ligne(0.2);
+    break;
+      }
+    break;
+    case (BLEU): //Parcour a effectuer couleur initiale vert
+    switch(etape){
+      case 1:
+      computePIDLigneDroite(3200,3200,0.2,0.2);
+      if (detection_distance_droite()>120){
+        ENCODER_Reset(LEFT);
+        ENCODER_Reset(RIGHT);
+        etape++;
+      }
+      break;
+      case 2:
+      computePID(6929,11023,0.2,0.32);
+      Serial.println("tourne vert");
+      if(ENCODER_Read(LEFT)>=11023){//bonne vakeur
+      ENCODER_Reset(LEFT);
+      ENCODER_Reset(RIGHT);
+      etape ++;
+
+    }
+    break;
+
+    case 3:
+      computePIDLigneDroite(3200,3200,SPEED,SPEED);
+      Serial.println("avance");
+      if (ENCODER_Read(RIGHT)>8148){
+        etape++;
+        ENCODER_ReadReset(0);
+        ENCODER_ReadReset(1);
+      }
+      break;
+
+
+      case 4:
+      computePID(6929,11023,0.2,0.32);//ajouter bonne valeur
+      if(ENCODER_Read(LEFT)>=11023){//bonne vakeur
+      ENCODER_Reset(LEFT);
+      ENCODER_Reset(RIGHT);
+      etape ++;
+
+    }
+    break;
+    case 5:
+    suiveur_mur_gauche(0.2);
+    if(detection_distance_gauche()>120){
+      ENCODER_Reset(LEFT);
+      ENCODER_Reset(RIGHT);
+      etape++;
+    }
+    break;
+
+    case 6:
+    computePIDLigneDroite(3200,3200,0.2,0.2);
+    if (ENCODER_Read(RIGHT)>2200){
+      ENCODER_Reset(RIGHT);
+      ENCODER_Reset(LEFT);
+      etape ++;
+    }
+    break;
+
+    case 7:
+    suiveur_ligne(0.2);
+    break;
+
     
+    
+    
+
+
+
     break;
    
   }
+}
 }
