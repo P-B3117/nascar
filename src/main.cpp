@@ -33,11 +33,12 @@ void setup()
 
 void loop()
 {
+  suiveur_mur(0.2);
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-  Serial.print(ENCODER_Read(1));
+  //Serial.print(ENCODER_Read(1));
   //Serial.print("    ");
-  Serial.println(ENCODER_Read(0));
+ // Serial.println(ENCODER_Read(0));
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
@@ -110,8 +111,8 @@ void loop()
       Serial.println("case 5");
       suiveur_mur(0.2);
        //rajouter detectio cup
-        if (getCouleur()==BLANC){
-            SERVO_SetAngle(1,160);
+        if (detection_distance_haut()>120){
+            //SERVO_SetAngle(1,160);
             etape ++;
           }
           break;      
