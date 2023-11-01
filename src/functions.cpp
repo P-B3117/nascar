@@ -54,9 +54,9 @@ int detecteur_ligne()
     return option;
 }
 bool extreme_droite(){
-    float tension_extreme_gauche=analogRead(A2);
+    float tension_extreme_gauche=analogRead(A8);
     //Serial.println(tension_extreme_gauche);
-    if(tension_extreme_gauche>200){
+    if(tension_extreme_gauche>490){
         return true;
     }
         else {
@@ -65,9 +65,9 @@ bool extreme_droite(){
     
 }
 bool extreme_gauche(){
-    float tension_extreme_droite=analogRead(A8)*5.0/1023.0;
+    float tension_extreme_droite=analogRead(A2);
     //Serial.println(tension_extreme_droite);
-    if(tension_extreme_droite>2.0){
+    if(tension_extreme_droite>200){
         return true;
     }
     else{
@@ -109,8 +109,8 @@ void suiveur_ligne(float power){
         while( extreme_droite()==true){}
     } 
      else if (extreme_gauche()==true)  {
-        MOTOR_SetSpeed(MOTORGAUCHE,-power/2);
-        MOTOR_SetSpeed(MOTORDROITE,power/2);
+        MOTOR_SetSpeed(MOTORDROITE,-power/2);
+        MOTOR_SetSpeed(MOTORGAUCHE,power/2);
         while( extreme_gauche()==true){}
     } 
 }

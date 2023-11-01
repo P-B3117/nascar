@@ -19,6 +19,6 @@ void loop() {
  //Serial.println(detecteur_ligne());
  //delay(500);
  //suiveur_ligne(0.2);
- //Serial.println(analogRead(A8));
-// Serial.println(extreme_gauche());
+ //Serial.println(analogRead(A2));
+ //Serial.println(extreme_gauche());
 }
