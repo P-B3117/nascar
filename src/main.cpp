@@ -117,8 +117,15 @@ void loop()
           }
           break;      
       
+      
       case 6:
-      computePID(0,0,0,0);
+      suiveur_mur(0.2);
+      if (detecteur_ligne()==DROITE_SUIVEUR ||detecteur_ligne()==GAUCHE_SUIVEUR || detecteur_ligne()==CENTRE){
+            //SERVO_SetAngle(1,160);
+            etape ++;
+          }
+      case 7:
+      suiveur_ligne(0.2);
       break;
       }
     /*case VERT: //Parcour a effectuer couleur initiale jaune  

@@ -29,6 +29,19 @@
 #define micpin A7
 #define moyenneSifflet 700
 
+// valeur suiveur ligne
+#define AUCUN 0
+#define GAUCHE 1
+//#define CENTRE 2
+#define DROITE 3
+#define DROITE_SUIVEUR 4
+#define CENTRE 5
+#define GAUCHE_SUIVEUR 6
+#define TOUT 7
+#define MOTORGAUCHE 0
+#define MOTORDROITE 1
+ //structure pour avancer
+
 //Global pour avancer
  struct nice{
   bool isMoving = false;
@@ -88,3 +101,6 @@ bool detection_cup_rouge();
 
 bool detection_cup_vert();
 
+void suiveur_ligne(float power);
+
+int detecteur_ligne();

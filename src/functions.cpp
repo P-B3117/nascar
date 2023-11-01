@@ -924,9 +924,44 @@ bool extreme_gauche(){
     else{
         return false;
     }
-
-
 }
+
+void suiveur_ligne(float power){
+    MOTOR_SetSpeed(RIGHT,power);
+    MOTOR_SetSpeed(LEFT,power);
+
+   
+    if(detecteur_ligne()==CENTRE){
+        MOTOR_SetSpeed(MOTORGAUCHE,power);
+        MOTOR_SetSpeed(MOTORDROITE,power);
+        Serial.println("tout dorit");
+    }
+    else if(detecteur_ligne()==DROITE_SUIVEUR){
+        MOTOR_SetSpeed(MOTORGAUCHE,power+0.1);
+        MOTOR_SetSpeed(MOTORDROITE,0);
+        while (detecteur_ligne()==DROITE_SUIVEUR){
+        Serial.println("vers la droite");
+        }
+    }
+    else if(detecteur_ligne()==GAUCHE_SUIVEUR){
+        MOTOR_SetSpeed(MOTORGAUCHE,0);
+        MOTOR_SetSpeed(MOTORDROITE,power+0.1);
+        while(detecteur_ligne()==GAUCHE_SUIVEUR){
+        Serial.println("vers la gauche");
+        }
+    }  
+    else if (extreme_droite()==true)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,power/2);
+        MOTOR_SetSpeed(MOTORDROITE,-power/2);
+        while( extreme_droite()==true){}
+    } 
+     else if (extreme_gauche()==true)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,-power/2);
+        MOTOR_SetSpeed(MOTORDROITE,power/2);
+        while( extreme_gauche()==true){}
+    } 
+}
+
 void suiveur_mur(float power){
     if (detection_distance_haut()<=5.5){//tres proche
         MOTOR_SetSpeed(RIGHT,power+(power/1.5));
@@ -946,11 +981,11 @@ void suiveur_mur(float power){
         MOTOR_SetSpeed(RIGHT,power);
         MOTOR_SetSpeed(LEFT,power+power/1.5);
     }
-    else if(detection_distance_haut()>120){
+    else if(detection_distance_haut()>120)
+    {
        
         MOTOR_SetSpeed(RIGHT,0);
-        MOTOR_SetSpeed(LEFT,power);
-        
+        MOTOR_SetSpeed(LEFT,power);        
     }
 
 
