@@ -83,3 +83,8 @@ void computePIDTourneDroite(int targetDroit, int targetGauche, float pwrLimitDro
 int suiveur_ligne();
 
 void suiveur_mur(float power);
+
+bool detection_cup_rouge();
+
+bool detection_cup_vert();
+
