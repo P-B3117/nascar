@@ -7,8 +7,8 @@
 
 //détecteur de distance
 //define
-#define BAS 0
-#define HAUT 3
+#define distance_droite 3
+#define distance_gauche 0
 //PID
 //define
 
@@ -68,17 +68,23 @@ unsigned long interval = 1000;
  
 
 
-float detection_distance_bas (void){
-    float tension_bas=ROBUS_ReadIR(BAS);
-    float inverse_bas=1/tension_bas;
-    float distance_bas=inverse_bas*6839.3-6.3;
-    return distance_bas;
+float detection_distance_gauche (void){
+    float tension_gauche=ROBUS_ReadIR(distance_gauche);
+    float inverse_gauche=1/tension_gauche;
+    float distance_left=inverse_gauche*6839.3-6.3;
+    return distance_left;
 }
-float detection_distance_haut (void){
-    float tension_haut=ROBUS_ReadIR(HAUT);
-    float inverse_haut=1/tension_haut;
-    float distance_haut=inverse_haut*6839.3-6.3;
-    return distance_haut;
+float detection_distance_droite (void){
+    float tension_droite=ROBUS_ReadIR(distance_droite);
+    float inverse_droite=1/tension_droite;
+    float distance_right=inverse_droite*6839.3-6.3;
+    return distance_right;
+}
+float detecteur_distance_gauche (void){
+    float tension_gauche=ROBUS_ReadIR(distance_gauche);
+    float inverse_gauche=1/tension_gauche;
+    float distance_left=inverse_gauche*6839.3-6.3;
+    return distance_left;
 }
 
 void couleurINIT() { //
@@ -454,21 +460,19 @@ void slowDown(int target = TARGET_SLOW)
 bool detectionSifflet (){
 
   unsigned long currentMillis = millis();
-  mic = analogRead(micpin);
   amplitude = abs(moyenneSifflet - mic); 
   //Serial.println(amplitude);
 
-  if(amplitude<200){
-    if(currentMillis-previousMillis > interval){
+  if(analogRead(A13)>600){
+    
       siffletActif = true;
-      }
+      
     }
 
   else{
-    previousMillis = currentMillis;
     siffletActif = false;
   }
-  Serial.println(siffletActif);
+  //Serial.println(siffletActif);
 
   return siffletActif;
 
@@ -904,10 +908,10 @@ int detecteur_ligne()
     }*/
     return option;
 }
-bool extreme_droite(){
-    float tension_extreme_gauche=analogRead(A2);
+bool extreme_gauche(){
+    float tension_extreme_gauche=analogRead(A10);
     //Serial.println(tension_extreme_gauche);
-    if(tension_extreme_gauche>200){
+    if(tension_extreme_gauche>480){
         return true;
     }
         else {
@@ -915,10 +919,10 @@ bool extreme_droite(){
         }
     
 }
-bool extreme_gauche(){
-    float tension_extreme_droite=analogRead(A8)*5.0/1023.0;
+bool extreme_droite(){
+    float tension_extreme_droite=analogRead(A11);
     //Serial.println(tension_extreme_droite);
-    if(tension_extreme_droite>2.0){
+    if(tension_extreme_droite >100){
         return true;
     }
     else{
@@ -962,32 +966,57 @@ void suiveur_ligne(float power){
     } 
 }
 
-void suiveur_mur(float power){
-    if (detection_distance_haut()<=5.5){//tres proche
+void suiveur_mur_droit(float power){
+    if (detection_distance_droite()<=5.5){//tres proche
         MOTOR_SetSpeed(RIGHT,power+(power/1.5));
         MOTOR_SetSpeed(LEFT,power/3);
     }
-    else if (detection_distance_haut()>5.5 && detection_distance_haut()<7){//centre
+    else if (detection_distance_droite()>5.5 && detection_distance_droite()<7){//centre
         MOTOR_SetSpeed(RIGHT,power);
         MOTOR_SetSpeed(LEFT,power);
 
     }
-    else if (detection_distance_haut()>=7 && detection_distance_haut()<11){//loin
+    else if (detection_distance_droite()>=7 && detection_distance_droite()<11){//loin
         MOTOR_SetSpeed(RIGHT,power);
         MOTOR_SetSpeed(LEFT,power+power/3);
     }
     
-    else if (detection_distance_haut()>=11 && detection_distance_haut()<40){//tres loin
+    else if (detection_distance_droite()>=11 && detection_distance_droite()<40){//tres loin
         MOTOR_SetSpeed(RIGHT,power);
         MOTOR_SetSpeed(LEFT,power+power/1.5);
     }
-    else if(detection_distance_haut()>120)
+    else if(detection_distance_droite()>120)
     {
        
         MOTOR_SetSpeed(RIGHT,0);
         MOTOR_SetSpeed(LEFT,power);        
     }
+}
 
 
+void suiveur_mur_gauche(float power){
+    if (detection_distance_gauche()<=5.5){//tres proche
+        MOTOR_SetSpeed(LEFT,power+(power/1.5));
+        MOTOR_SetSpeed(RIGHT,power/3);
+    }
+    else if (detecteur_distance_gauche()>5.5 && detecteur_distance_gauche()<7){//centre
+        MOTOR_SetSpeed(LEFT,power);
+        MOTOR_SetSpeed(RIGHT,power);
 
+    }
+    else if (detecteur_distance_gauche()>=7 && detecteur_distance_gauche()<11){//loin
+        MOTOR_SetSpeed(LEFT,power);
+        MOTOR_SetSpeed(RIGHT,power+power/3);
+    }
+    
+    else if (detecteur_distance_gauche()>=11 && detecteur_distance_gauche()<40){//tres loin
+        MOTOR_SetSpeed(LEFT,power);
+        MOTOR_SetSpeed(RIGHT,power+power/1.5);
+    }
+    else if(detecteur_distance_gauche()>120)
+    {
+       
+        MOTOR_SetSpeed(LEFT,0);
+        MOTOR_SetSpeed(RIGHT,power);        
+    }
 }

@@ -20,8 +20,7 @@ void setup()
   create();
   couleurINIT();
   SERVO_Enable(1);
- SERVO_SetAngle(1,160);
-  
+  SERVO_SetAngle(1,160);
 
   while (ROBUS_IsBumper(3)==false){//!detectionSifflet()==true  ){
     couleurInitiale = getCouleur();
@@ -33,7 +32,8 @@ void setup()
 
 void loop()
 {
-  suiveur_mur(0.2);
+//Serial.println(analogRead(A13));
+//suiveur_mur_droit(0.2);
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
   //Serial.print(ENCODER_Read(1));
@@ -54,7 +54,7 @@ void loop()
         computePIDLigneDroite(3200,3200,SPEED,SPEED);
         Serial.println("j'avance");
 
-        if(detection_distance_haut() > 120){
+        if(detection_distance_droite() > 120){
           Serial.println("etape++");
           etape ++;
           ENCODER_ReadReset(1);
@@ -109,9 +109,9 @@ void loop()
         break;
       case 5:
       Serial.println("case 5");
-      suiveur_mur(0.2);
+      suiveur_mur_droit(0.2);
        //rajouter detectio cup
-        if (detection_distance_haut()>120){
+        if (detection_distance_droite()>120){
             //SERVO_SetAngle(1,160);
             etape ++;
           }
@@ -119,7 +119,7 @@ void loop()
       
       
       case 6:
-      suiveur_mur(0.2);
+      suiveur_mur_droit(0.2);
       if (detecteur_ligne()==DROITE_SUIVEUR ||detecteur_ligne()==GAUCHE_SUIVEUR || detecteur_ligne()==CENTRE){
             //SERVO_SetAngle(1,160);
             etape ++;
@@ -128,9 +128,9 @@ void loop()
       suiveur_ligne(0.2);
       break;
       }
-    /*case VERT: //Parcour a effectuer couleur initiale jaune  
+    case VERT: //Parcour a effectuer couleur initiale jaune  
     
-    break;*/
+    break;
    
   }
 }

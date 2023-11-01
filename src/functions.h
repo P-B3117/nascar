@@ -55,9 +55,9 @@
   float valeurDroite = VITESSE_AVANCE_DROITE;
 };
 
-float detection_distance_haut (void); //retourne la distance du capteur du haut
+float detection_distance_droite (void); //retourne la distance du capteur du haut
 
-float detection_distance_bas (void); //retourne la distance du capteur du bas
+float detection_distance_gauche (void); //retourne la distance du capteur du bas
 
 void tournegauche(float valeurGauche, float valeurDroite ); //legacy, pas touche tourne de 90deg
 
@@ -95,7 +95,6 @@ void computePIDTourneDroite(int targetDroit, int targetGauche, float pwrLimitDro
 
 int suiveur_ligne();
 
-void suiveur_mur(float power);
 
 bool detection_cup_rouge();
 
@@ -104,3 +103,9 @@ bool detection_cup_vert();
 void suiveur_ligne(float power);
 
 int detecteur_ligne();
+
+bool extreme_droite();
+
+void suiveur_mur_gauche(float power);
+
+void suiveur_mur_droit(float power);
