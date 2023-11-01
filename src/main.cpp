@@ -35,9 +35,9 @@ void loop()
 {
   //computePIDSuiveurMur(3200,3200,0.3,0.3,detection_distance_haut(),80)
   //computePID(3200,3200,0.3,0.3);
-  //Serial.print(ENCODER_Read(1));
+  Serial.print(ENCODER_Read(1));
   //Serial.print("    ");
-  //Serial.println(ENCODER_Read(0));
+  Serial.println(ENCODER_Read(0));
   
  //Serial.println(getCouleur());
  //Serial.println(detectionSifflet());
@@ -45,7 +45,7 @@ void loop()
  /*Serial.print("bas:");
  Serial.println(detection_distance_haut());*/
   switch(couleurInitiale){
-    case JAUNE:
+    case (JAUNE || ROUGE):
 
       switch(etape){      
       case 1: //ligne depart avance jusqua fin mur
@@ -65,7 +65,7 @@ void loop()
       case 2://on tourne de jaune a jaune
        //while(ENCODER_Read(LEFT)< 12800)
        //temporaire encodeur gauche ne marche plus
-      if(ENCODER_Read(1<14488)){
+      if(ENCODER_Read(RIGHT)<14488){
        computePID(14488,18582, 0.200, 0.257);
       }
        
@@ -73,7 +73,7 @@ void loop()
        Serial.println("je tourne");
        if (ENCODER_Read(RIGHT)>=14488 && ENCODER_Read(LEFT)>=18582){
         ENCODER_ReadReset(RIGHT);
-        ENCODER_Read(LEFT);
+        ENCODER_ReadReset(LEFT);
         etape++;
         Serial.println("fin tourner");
         }
@@ -83,7 +83,8 @@ void loop()
       
       case 3:
       computePIDLigneDroite(3200,3200,SPEED,SPEED);
-      if (detection_distance_haut()>120){
+      Serial.println("avance");
+      if (ENCODER_Read(RIGHT)>8148){
         etape++;
         ENCODER_ReadReset(0);
         ENCODER_ReadReset(1);
@@ -107,13 +108,8 @@ void loop()
         break;
       case 5:
       Serial.println("case 5");
-      computePIDLigneDroite(3200,3200,SPEED,SPEED);
-        if (detection_distance_haut()<20){
-          Serial.println("servo!!!!!");
-          position=ENCODER_Read(1);
-          SERVO_SetAngle(1,0);
-          delay(20); 
-          }
+      suiveur_mur(0.2);
+       //rajouter detectio cup
         if (getCouleur()==BLANC){
             SERVO_SetAngle(1,160);
             etape ++;

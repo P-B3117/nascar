@@ -8,8 +8,7 @@
 //détecteur de distance
 //define
 #define BAS 0
-#define HAUT 1
-
+#define HAUT 3
 //PID
 //define
 
