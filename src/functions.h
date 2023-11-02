@@ -42,6 +42,18 @@
 #define MOTORDROITE 1
  //structure pour avancer
 
+ // fonction.h
+
+#define PROXTOUT 2
+#define PROXVERT 1
+#define PROXROUGE 0
+#define PROXRIEN -1
+#define PROXGAUCHE 0
+#define PROXDROITE 1
+#define PROXDEVANT 2
+int detection(int orientation);
+
+
 //Global pour avancer
  struct nice{
   bool isMoving = false;

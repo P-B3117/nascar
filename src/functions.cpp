@@ -1023,3 +1023,46 @@ void suiveur_mur_gauche(float power){
         MOTOR_SetSpeed(RIGHT,power);        
     }
 }
+
+
+
+
+
+//fonction.cpp
+
+int detection(int orientation)
+{
+    bool valueR = 0;
+    bool valueV = 0;
+    
+    if (orientation == 0) {
+    valueR = !digitalRead(38);//valeur du voltage de la DEL rouge
+    valueV = !digitalRead(39);//valeur du voltage de la DEL vert
+    }
+    else if (orientation == 1) {
+    valueR = !digitalRead(40);//valeur du voltage de la DEL rouge
+    valueV = !digitalRead(41);//valeur du voltage de la DEL vert
+    }
+    else if (orientation == 2) {
+    valueR = !digitalRead(42);//valeur du voltage de la DEL rouge
+    valueV = !digitalRead(43);//valeur du voltage de la DEL vert
+    }
+
+  if (valueR && valueV)
+  {
+    return PROXTOUT;
+  }
+  else if (valueV) {
+    return PROXVERT;
+  }
+  else if (valueR) {
+    return PROXROUGE;
+  }
+  else {
+    return PROXRIEN;
+  }
+}
+
+//gauche rouge: 38 vert : 39
+//droite rouge: 40 vert : 41
+//devant rouge: 42 vert : 43

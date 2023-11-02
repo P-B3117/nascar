@@ -19,8 +19,8 @@ void setup()
   Serial.begin(9600);
   create();
   couleurINIT();
-  SERVO_Enable(1);
-  SERVO_SetAngle(1,160);
+  SERVO_Enable(0);
+  SERVO_SetAngle(0,90);
 
   while (ROBUS_IsBumper(3)==false){//!detectionSifflet()==true  ){
     couleurInitiale = getCouleur();
@@ -113,11 +113,19 @@ void loop()
         }
         break;
       case 5:
+      int beginmillis;
       Serial.println("case 5");
       suiveur_mur_droit(0.2);
        //rajouter detectio cup
+        if (detection(PROXDROITE)==PROXTOUT ||detection(PROXDROITE)==PROXROUGE || detection(PROXDROITE)==PROXVERT ){
+          SERVO_SetAngle(0,170);
+          beginmillis = millis();
+        }
+
+        if (millis() >= 2000 + beginmillis) SERVO_SetAngle(0,90);
+        
         if (detection_distance_droite()>120){
-            //SERVO_SetAngle(1,160);
+            SERVO_SetAngle(0,90);
             ENCODER_ReadReset(RIGHT);
             ENCODER_ReadReset(LEFT);
 
