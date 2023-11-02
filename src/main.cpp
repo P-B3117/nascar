@@ -32,9 +32,6 @@ void setup()
   SERVO_SetAngle(1,60);
 
   while (!ROBUS_IsBumper(3) && analogRead(A13) < 600){
-    Serial.print("in loop");
-    Serial.print("          ");
-    Serial.println(detection_distance_gauche());
     couleurInitiale = getCouleur();
     Serial.println(couleurInitiale);
     delay(30);
@@ -150,7 +147,7 @@ void loop()
           beginmillis = millis();
         }
 
-        if (millis() >= 1000 + beginmillis) SERVO_SetAngle(0,90);
+        if (millis() >= 1500 + beginmillis) SERVO_SetAngle(0,90);
       if (ENCODER_Read(LEFT)>4600){
         
         etape++;
@@ -168,7 +165,7 @@ void loop()
           beginmillis = millis();
         }
 
-        if (millis() >= 1000 + beginmillis) SERVO_SetAngle(0,90);
+        if (millis() >= 1500 + beginmillis) SERVO_SetAngle(0,90);
         
         if (detection_distance_droite()>120){
             SERVO_SetAngle(0,90);
@@ -188,7 +185,7 @@ void loop()
           beginmillis = millis();
         }
 
-        if (millis() >= 1000 + beginmillis) SERVO_SetAngle(0,90);
+        if (millis() >= 1500 + beginmillis) SERVO_SetAngle(0,90);
         
       if (ENCODER_Read(RIGHT)>=2000){
         SERVO_SetAngle(0,90);
@@ -352,15 +349,15 @@ void loop()
     break;
 
     case 5:
-      computePIDLigneDroite(3500,3500,SPEED,SPEED);
+      computePIDLigneDroite(1500,1500,SPEED,SPEED);
       Serial.println("avance");
       if (detection(PROXGAUCHE)==PROXTOUT ||detection(PROXGAUCHE)==PROXROUGE || detection(PROXGAUCHE)==PROXVERT ){
           SERVO_SetAngle(0,20);
           beginmillis = millis();
         }
 
-        if (millis() >= 1200 + beginmillis) SERVO_SetAngle(0,90);
-      if (ENCODER_Read(LEFT)>3500){
+        if (millis() >= 1500 + beginmillis) SERVO_SetAngle(0,90);
+      if (ENCODER_Read(LEFT)>1500){
         
         etape++;
         ENCODER_Reset(0);
@@ -377,12 +374,12 @@ void loop()
           beginmillis = millis();
         }
 
-        if (millis() >= 1000 + beginmillis) SERVO_SetAngle(0,90);
+        if (millis() >= 1500 + beginmillis) SERVO_SetAngle(0,90);
         
         if (detection_distance_gauche()>80){
             SERVO_SetAngle(0,90);
             lastPosRight = ENCODER_ReadReset(RIGHT);
-            lastPosLeft = ENCODER_Read(LEFT);
+            lastPosLeft = ENCODER_ReadReset(LEFT);
             etape++;
           }
     break;
@@ -391,11 +388,11 @@ void loop()
     Serial.println("case 7");
     if (lastPosLeft - lastPosRight > 0) {
       computePID(0,lastPosLeft - lastPosRight, 0, 0.2);
-      if (ENCODER_Read(RIGHT) >= lastPosLeft - lastPosRight) { ENCODER_Reset(0); ENCODER_Reset(1); break; }
+      if (ENCODER_Read(LEFT) >= lastPosLeft - lastPosRight) { ENCODER_Reset(0); ENCODER_Reset(1); etape++; break; }
     }
     if (lastPosLeft - lastPosRight < 0) {
       computePID(lastPosLeft - lastPosRight,0, 0.2, 0);
-      if (ENCODER_Read(LEFT) >= lastPosLeft - lastPosRight) { ENCODER_Reset(0); ENCODER_Reset(1); break; }
+      if (ENCODER_Read(RIGHT) >= lastPosLeft - lastPosRight) { ENCODER_Reset(0); ENCODER_Reset(1); etape++; break; }
     }
     break;
 
@@ -407,7 +404,7 @@ void loop()
     Serial.println(ENCODER_Read(1));
     MOTOR_SetSpeed(0, 0.157);
     MOTOR_SetSpeed(1, 0.15);
-    if (ENCODER_Read(RIGHT) >= 2400 && ENCODER_Read){
+    if (ENCODER_Read(RIGHT) >= 2800){
       ENCODER_Reset(RIGHT);
       ENCODER_Reset(LEFT);
       etape ++;
