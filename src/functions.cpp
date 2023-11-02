@@ -899,12 +899,12 @@ int detecteur_ligne()
         Serial.println("centre et droite  ");
         Serial.println(option);
     }
-    /*else if(tension_suiveur>4.8){
+    else if(tension_suiveur>4.8){
         option=TOUT;
         Serial.println("tout   ");
         Serial.println(option);
         
-    }*/
+    }
     return option;
 }
 bool extreme_gauche(){

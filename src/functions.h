@@ -118,6 +118,8 @@ int detecteur_ligne();
 
 bool extreme_droite();
 
+bool extreme_gauche();
+
 void suiveur_mur_gauche(float power);
 
 void suiveur_mur_droit(float power);

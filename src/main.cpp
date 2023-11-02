@@ -9,7 +9,8 @@ int couleurInitiale;
 
 
 //variable algo
-int etape =1;// 1;
+int etape =1;// 1;à
+int beginmillis;
 
 int position; 
 
@@ -20,7 +21,10 @@ void setup()
   create();
   couleurINIT();
   SERVO_Enable(0);
+  SERVO_Enable(1);
   SERVO_SetAngle(0,90);
+  SERVO_SetAngle(1,60);
+
 
   while (ROBUS_IsBumper(3)==false){//!detectionSifflet()==true  ){
     couleurInitiale = getCouleur();
@@ -32,8 +36,10 @@ void setup()
 
 void loop()
 {
-  if (couleurInitiale == JAUNE) couleurInitiale = ROUGE;
-  else if (couleurInitiale == VERT) couleurInitiale = BLEU;
+  //if (couleurInitiale == JAUNE) couleurInitiale = ROUGE;
+  //else if (couleurInitiale == VERT) couleurInitiale = BLEU;
+  //if(detection(PROXDEVANT)==PROXTOUT){
+  //SERVO_SetAngle(1,100);}
 //Serial.println(analogRead(A12)*5.0/1023.0);
 //suiveur_ligne(0.2);
 //Serial.println(extreme_droite());
@@ -78,8 +84,8 @@ void loop()
        
        Serial.println("je tourne");
        if (ENCODER_Read(RIGHT)>=14488 && ENCODER_Read(LEFT)>=18582){
-        ENCODER_ReadReset(RIGHT);
-        ENCODER_ReadReset(LEFT);
+        ENCODER_Reset(RIGHT);
+        ENCODER_Reset(LEFT);
         etape++;
         Serial.println("fin tourner");
         }
@@ -90,10 +96,11 @@ void loop()
       case 3:
       computePIDLigneDroite(3200,3200,SPEED,SPEED);
       Serial.println("avance");
-      if (ENCODER_Read(RIGHT)>8148){
+      if (ENCODER_Read(LEFT)>8148){
+        
         etape++;
-        ENCODER_ReadReset(0);
-        ENCODER_ReadReset(1);
+        ENCODER_Reset(0);
+        ENCODER_Reset(1);
       }
 
         break;
@@ -113,7 +120,6 @@ void loop()
         }
         break;
       case 5:
-      int beginmillis;
       Serial.println("case 5");
       suiveur_mur_droit(0.2);
        //rajouter detectio cup
@@ -176,8 +182,48 @@ void loop()
     case 10:
     Serial.println("suiveur ligne");
     suiveur_ligne(0.2);
+    if(detection(PROXDEVANT) == PROXTOUT or detection(PROXDEVANT) == PROXVERT or detection(PROXDEVANT) == PROXROUGE){
+      etape++;
+    }
+    if(detecteur_ligne()==TOUT && extreme_droite()==0 && extreme_gauche()){
+      etape+=3;
+    }
     break;
-      }
+    case 11:
+    computePID(0,0,0,0);
+    SERVO_SetAngle(1,100);
+    delay(500);
+    etape++;
+    break;
+
+  case 12:
+  suiveur_ligne(0.2);
+  if(detecteur_ligne()==TOUT && extreme_droite()==1){
+  Serial.println("AR'JEIN CALISSE!!!");
+  if (millis() >= 100 + beginmillis) etape++;
+  }
+  else beginmillis = millis();
+  break;
+  
+  case 13:
+  Serial.println("case 13");
+  computePID(0,2100,0,0.2);
+  if(ENCODER_Read(LEFT)<=2100){
+    ENCODER_Reset(RIGHT);
+    ENCODER_Reset(LEFT);
+    etape++;
+  }
+  break;
+  case 14:
+  computePIDLigneDroite(3200,3200,0.2,0.2);
+  if (detection_distance_droite()<20){
+   ENCODER_Reset(RIGHT);
+   ENCODER_Reset(LEFT);
+  etape ++;
+  }
+
+  break;    
+    }
     break;
     case (BLEU): //Parcour a effectuer couleur initiale vert
     switch(etape){
@@ -250,6 +296,15 @@ void loop()
 
     case 7:
     suiveur_ligne(0.2);
+    if(detection(PROXDEVANT)==PROXTOUT){
+      etape++;
+    }
+    break;
+    case 8:
+    computePID(0,0,0,0);
+    SERVO_SetAngle(1,100);
+    break;
+    }
     break;
 
     
@@ -262,4 +317,4 @@ void loop()
    
   }
 }
-}
+
