@@ -946,13 +946,6 @@ int suiveur_ligne(float power){
           Serial.println("extreme droite");
         }
     } 
-     else if (extreme_gauche()==true)  {
-        MOTOR_SetSpeed(MOTORGAUCHE,-power/3);
-        MOTOR_SetSpeed(MOTORDROITE,power/3);
-        while( extreme_gauche()==true){
-          Serial.println("extreme gauche");
-        }
-    } 
     else if(detecteur_ligne()==DROITE_SUIVEUR){
         MOTOR_SetSpeed(MOTORGAUCHE,power);
         MOTOR_SetSpeed(MOTORDROITE,0);
@@ -972,6 +965,13 @@ int suiveur_ligne(float power){
         MOTOR_SetSpeed(MOTORDROITE,power);
         Serial.println("tout dorit");
     }
+     else if (extreme_gauche()==true)  {
+        MOTOR_SetSpeed(MOTORGAUCHE,-power/3);
+        MOTOR_SetSpeed(MOTORDROITE,power/3);
+        while( extreme_gauche()==true){
+          Serial.println("extreme gauche");
+        }
+    } 
 
     return posSuiveu;
    
@@ -1006,11 +1006,11 @@ void suiveur_mur_droit(float power){
 
 
 void suiveur_mur_gauche(float power){
-    if (detection_distance_gauche()<=5){//tres proche
+    if (detection_distance_gauche()<=5.5){//tres proche
         MOTOR_SetSpeed(LEFT,power+(power/2));
-        MOTOR_SetSpeed(RIGHT,power/2.8);
+        MOTOR_SetSpeed(RIGHT,power/2.2);
     }
-    else if (detecteur_distance_gauche()>5 && detecteur_distance_gauche()<7){//centre
+    else if (detecteur_distance_gauche()>5.5 && detecteur_distance_gauche()<7){//centre
         MOTOR_SetSpeed(LEFT,power);
         MOTOR_SetSpeed(RIGHT,power);
 
@@ -1026,7 +1026,6 @@ void suiveur_mur_gauche(float power){
     }
     else if(detecteur_distance_gauche()>120)
     {
-       
         MOTOR_SetSpeed(LEFT,-0.08);
         MOTOR_SetSpeed(RIGHT,power);        
     }
