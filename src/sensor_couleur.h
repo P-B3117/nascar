@@ -13,7 +13,8 @@ public:
   tcs34725(void);
 
   boolean begin(void);
-  int getData(void);  
+  int getData(void);
+  void dataUpdate(void);
 
   boolean isAvailable, isSaturated;
   uint16_t againx, atime, atime_ms;
@@ -22,6 +23,9 @@ public:
   uint16_t r_comp, g_comp, b_comp, c_comp;
   uint16_t saturation, saturation75;
   float cratio, cpl, ct, lux, maxlux;
+  unsigned long beginmillis;
+  bool isNew;
+  int couleur;
   
 private:
   struct tcs_agc {

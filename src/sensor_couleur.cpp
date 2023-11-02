@@ -16,6 +16,8 @@ const tcs34725::tcs_agc tcs34725::agc_lst[] = {
   { TCS34725_GAIN_1X,  TCS34725_INTEGRATIONTIME_2_4MS,   248,     0 }
 };
 tcs34725::tcs34725() : agc_cur(0), isAvailable(0), isSaturated(0) {
+  isNew = false;
+  couleur = 0;
 }
 
 // initialize the sensor
@@ -50,32 +52,32 @@ void tcs34725::setGainTime(void) {
 
 // Retrieve data from the sensor and do the calculations
 int tcs34725::getData(void) {
-  int couleur;
   // read the sensor and autorange if necessary
   tcs.getRawData(&r, &g, &b, &c);
-  while(1) {
-    if (agc_lst[agc_cur].maxcnt && c > agc_lst[agc_cur].maxcnt) 
-      agc_cur++;
-    else if (agc_lst[agc_cur].mincnt && c < agc_lst[agc_cur].mincnt)
-      agc_cur--;
-    else break;
+  if (isNew == true) {
+    isNew = false;
+    beginmillis = millis();
+    
+    if (agc_lst[agc_cur].maxcnt && c > agc_lst[agc_cur].maxcnt)  agc_cur++;
 
-    setGainTime(); 
-    delay((256 - atime) * 2.4 * 2); // shock absorber
-    tcs.getRawData(&r, &g, &b, &c);
-    break;    
+    else if (agc_lst[agc_cur].mincnt && c < agc_lst[agc_cur].mincnt) agc_cur--;
+    //else break;
+
+    }
+  else if (millis() <= beginmillis + (256 - atime) * 2.4 * 2) {
+
+    if (agc_lst[agc_cur].maxcnt && c > agc_lst[agc_cur].maxcnt)  agc_cur++;
+    else if (agc_lst[agc_cur].mincnt && c < agc_lst[agc_cur].mincnt) agc_cur--;
+
   }
+  else {
+    setGainTime();
+    isNew = true;
+    //delay((256 - atime) * 2.4 * 2); // shock absorber
+    tcs.getRawData(&r, &g, &b, &c);
+    //break;
 
-  // DN40 calculations
- /* ir = (r + g + b > c) ? (r + g + b - c) / 2 : 0;
-  r_comp = r - ir;
-  g_comp = g - ir;
-  b_comp = b - ir;
-  c_comp = c - ir;   
-  cratio = float(ir) / float(c);*/
- // if (c < 10000){
-   // couleur = JAUNE;
- // }
+
   if (c > 10000){
   if (r > g && r > b){
     couleur=ROUGE;
@@ -106,6 +108,8 @@ int tcs34725::getData(void) {
    }
   }
   Serial.println(couleur);
+
+  }
 
   return couleur;
 }
