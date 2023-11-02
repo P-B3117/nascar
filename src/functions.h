@@ -5,6 +5,8 @@
 #include "sensor_couleur.h"
 
 
+//variable globale couleur
+
 #define Gauche 0
 #define Droite 1
 
@@ -67,6 +69,8 @@ int detection(int orientation);
   float valeurDroite = VITESSE_AVANCE_DROITE;
 };
 
+//global pour suiveu de ligne
+
 float detection_distance_droite (void); //retourne la distance du capteur du haut
 
 float detection_distance_gauche (void); //retourne la distance du capteur du bas
@@ -75,7 +79,7 @@ void tournegauche(float valeurGauche, float valeurDroite ); //legacy, pas touche
 
 void tournedroit(float valeurGauche,float valeurDroite); //legacy, pas touche tourne de 90deg
 
-void tourne();
+void tourne(int couleurInitiale);
 
 void avance(float speedLimit = SPEEDLIMIT); //avance continuellement
 
@@ -112,7 +116,7 @@ bool detection_cup_rouge();
 
 bool detection_cup_vert();
 
-void suiveur_ligne(float power);
+int suiveur_ligne(float power);
 
 int detecteur_ligne();
 
