@@ -181,7 +181,7 @@ void loop()
     break;
     case 10:
     Serial.println("suiveur ligne");
-    suiveur_ligne(0.2);
+    suiveur_ligne(0.15);
     if(detection(PROXDEVANT) == PROXTOUT or detection(PROXDEVANT) == PROXVERT or detection(PROXDEVANT) == PROXROUGE){
       etape++;
     }
@@ -197,7 +197,7 @@ void loop()
     break;
 
   case 12:
-  suiveur_ligne(0.2);
+  suiveur_ligne(0.15);
   if(detecteur_ligne()==TOUT && extreme_droite()==1){
   Serial.println("AR'JEIN CALISSE!!!");
   if (millis() >= 100 + beginmillis) etape++;
@@ -238,7 +238,7 @@ void loop()
       case 2:
       computePID(6929,11023,0.2,0.32);
       Serial.println("tourne vert");
-      if(ENCODER_Read(LEFT)>=11023){//bonne vakeur
+      if(ENCODER_Read(LEFT)>=11023){
       ENCODER_Reset(LEFT);
       ENCODER_Reset(RIGHT);
       etape ++;
@@ -249,7 +249,7 @@ void loop()
     case 3:
       computePIDLigneDroite(3200,3200,SPEED,SPEED);
       Serial.println("avance");
-      if (ENCODER_Read(RIGHT)>8148){
+      if (ENCODER_Read(LEFT)>8148){
         etape++;
         ENCODER_ReadReset(0);
         ENCODER_ReadReset(1);
@@ -295,7 +295,7 @@ void loop()
     break;
 
     case 7:
-    suiveur_ligne(0.2);
+    suiveur_ligne(0.15);
     if(detection(PROXDEVANT)==PROXTOUT){
       etape++;
     }
@@ -303,7 +303,14 @@ void loop()
     case 8:
     computePID(0,0,0,0);
     SERVO_SetAngle(1,100);
+    delay(500);
+    etape++;
     break;
+
+    case 9:
+    suiveur_ligne(0.15);
+    if()
+
     }
     break;
 
