@@ -221,12 +221,22 @@ void loop()
     }
     break;
     case 5:
+    int beginmillis;
+
     suiveur_mur_gauche(0.2);
-    if(detection_distance_gauche()>120){
-      ENCODER_Reset(LEFT);
-      ENCODER_Reset(RIGHT);
-      etape++;
-    }
+    if (detection(PROXGAUCHE)==PROXTOUT ||detection(PROXDROITE)==PROXROUGE || detection(PROXDROITE)==PROXVERT ){
+          SERVO_SetAngle(0,10);
+          beginmillis = millis();
+        }
+
+        if (millis() >= 2000 + beginmillis) SERVO_SetAngle(0,90);
+        
+        if (detection_distance_droite()>120){
+            SERVO_SetAngle(0,90);
+            ENCODER_ReadReset(RIGHT);
+            ENCODER_ReadReset(LEFT);
+            etape++;
+          }
     break;
 
     case 6:
