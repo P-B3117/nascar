@@ -410,6 +410,9 @@ void loop()
   else if (millis() >= 5000 + beginmillis && millis() <= 5350 + beginmillis){
   computePID(2000,2000,0,0.2);
   }
+  else {
+    computePIDLigneDroite(3200,3200,0.2,0.2);
+  }
 
   if (detection_distance_droite()<15){
    ENCODER_Reset(RIGHT);
